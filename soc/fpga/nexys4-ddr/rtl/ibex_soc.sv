@@ -17,7 +17,12 @@ module ibex_soc(
   input  wire       tdi,
   output wire       tdo
   );
-
+  
+  logic clk;
+  logic rst, rst_n;
+  
+  assign rst = ~rst_n;
+  
   typedef enum {
     DM_M,
     COREI_M,
@@ -53,9 +58,13 @@ module ibex_soc(
     'h00010, //UART
     'h00010  //TIMER
   };
-
-  logic          clk;
-  logic          rst, rst_n;
+  
+  wb_if wbm[NrMaster](.*);
+  wb_if wbs[NrSlave](.*);
+  
+  // define the macro if you want to use debugger
+  `ifdef DEBUG_MODULE_ACTIVE
+  
   logic          core_sleep;
   logic          ndmreset;
   logic          dmactive;
@@ -77,68 +86,65 @@ module ibex_soc(
   logic          tdo_o;
   logic          tdo_oe;
 
-  assign rst = ~rst_n;
   assign tdo = tdo_oe ? tdo_o : 1'bz;
 
-  wb_if wbm[NrMaster](.*);
-  wb_if wbs[NrSlave](.*);
+  wb_dm_top wb_dm (
+    .testmode  (1'b0),
+    .wbm       (wbm[DM_M]),
+    .wbs       (wbs[DM_S]),
+    .dmi_rst_n (dmi_rst_n),
+    .*);
 
+  dmi_jtag dmi (
+    .clk_i            (clk),
+    .rst_ni           (rst_n),
+    .testmode_i       (1'b0),
+    .dmi_rst_no       (dmi_rst_n),
+    .dmi_req_o        (dmi_req),
+    .dmi_req_valid_o  (dmi_req_valid),
+    .dmi_req_ready_i  (dmi_req_ready),
+    .dmi_resp_i       (dmi_resp),
+    .dmi_resp_ready_o (dmi_resp_ready),
+    .dmi_resp_valid_i (dmi_resp_valid),
+    .tck_i            (tck),
+    .tms_i            (tms),
+    .trst_ni          (trst_n),
+    .td_i             (tdi),
+    .td_o             (tdo_o),
+    .tdo_oe_o         (tdo_oe));
+  
+  `endif
+  
   clkgen_xil7series clkgen (
     .IO_CLK     (clk100mhz),
     .IO_RST_N   (ck_rst_n),
     .clk_sys    (clk),
     .rst_sys_n  (rst_n));
 
-  wb_ibex_core wb_ibex_core
-    (.instr_wb     (wbm[COREI_M]),
-     .data_wb      (wbm[CORED_M]),
-     .test_en      (1'b0),
-     .hart_id      (32'h0),
-     .boot_addr    (32'h0),
-     .irq_software (1'b0),
-     .irq_timer    (1'b0),
-     .irq_external (1'b0),
-     .irq_fast     (15'b0),
-     .irq_nm       (1'b0),
-     .fetch_enable (1'b1),
-     .*);
+  wb_ibex_core wb_ibex_core (
+    .instr_wb     (wbm[COREI_M]),
+    .data_wb      (wbm[CORED_M]),
+    .test_en      (1'b0),
+    .hart_id      (32'h0),
+    .boot_addr    (32'h0),
+    .irq_software (1'b0),
+    .irq_timer    (1'b0),
+    .irq_external (1'b0),
+    .irq_fast     (15'b0),
+    .irq_nm       (1'b0),
+    .fetch_enable (1'b1),
+    .*);
 
-  wb_dm_top wb_dm
-    (.testmode  (1'b0),
-     .wbm       (wbm[DM_M]),
-     .wbs       (wbs[DM_S]),
-     .dmi_rst_n (dmi_rst_n),
-     .*);
-
-  dmi_jtag dmi
-    (.clk_i            (clk),
-     .rst_ni           (rst_n),
-     .testmode_i       (1'b0),
-     .dmi_rst_no       (dmi_rst_n),
-     .dmi_req_o        (dmi_req),
-     .dmi_req_valid_o  (dmi_req_valid),
-     .dmi_req_ready_i  (dmi_req_ready),
-     .dmi_resp_i       (dmi_resp),
-     .dmi_resp_ready_o (dmi_resp_ready),
-     .dmi_resp_valid_i (dmi_resp_valid),
-     .tck_i            (tck),
-     .tms_i            (tms),
-     .trst_ni          (trst_n),
-     .td_i             (tdi),
-     .td_o             (tdo_o),
-     .tdo_oe_o         (tdo_oe));
-
-  wb_interconnect_sharedbus
-    #(.numm      (NrMaster),
-      .nums      (NrSlave),
-      .base_addr (wb_base_addr),
-      .size      (wb_size))
-  wb_intercon
-    (.*);
+  wb_interconnect_sharedbus #(
+    .numm      (NrMaster),
+    .nums      (NrSlave),
+    .base_addr (wb_base_addr),
+    .size      (wb_size)
+  ) wb_intercon (.*);
 
   wb_spramx32 #(
     .size(wb_size[RAM_S]),
-    .init_file("bootloader_v3.mem")
+    .init_file("bootloader.mem")
   ) wb_spram (
     .wb(wbs[RAM_S]));
   

@@ -1,0 +1,9 @@
+*.o
+*.d
+*.dis
+*.elf
+*.map
+*.bin
+*.vmem
+*.mem
+*/nbproject

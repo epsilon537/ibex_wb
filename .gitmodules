@@ -7,7 +7,6 @@
 [submodule "ibex"]
 	path = ibex
 	url = https://github.com/batuhanates/ibex.git
-	branch = nexys4-ddr
 [submodule "riscv-dbg"]
 	path = riscv-dbg
 	url = https://github.com/pbing/riscv-dbg.git

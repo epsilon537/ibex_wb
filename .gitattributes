@@ -1,1 +1,6 @@
-soc/asic/memory/ramcell/cellspecsheet/* linguist-vendored
+soc/asic/memory/ramcell/cellspecsheet/* linguist-documentation
+doc/* linguist-documentation
+
+pulpino/* linguist-vendored
+riscv-dbg/* linguist-vendored
+common_cells/* linguist-vendored

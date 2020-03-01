@@ -6,4 +6,5 @@
 *.bin
 *.vmem
 *.mem
+*.hex
 */nbproject

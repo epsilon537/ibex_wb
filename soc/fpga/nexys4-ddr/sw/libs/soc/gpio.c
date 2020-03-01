@@ -6,7 +6,7 @@
 #define GPIO_REG_OUTPUT		1
 #define GPIO_REG_DIRECTION	2
 
-void gpio_initialize(struct gpio * module, volatile void * base_address)
+void gpio_init(struct gpio * module, volatile void * base_address)
 {
 	module->registers = base_address;
 }

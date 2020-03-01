@@ -14,7 +14,7 @@ struct timer
  * @param module       Pointer to a timer instance structure.
  * @param base_address Base address of the timer hardware module.
  */
-void timer_initialize(struct timer * module, volatile void * base_address);
+void timer_init(struct timer * module, volatile void * base_address);
 
 /**
  * Resets a timer.

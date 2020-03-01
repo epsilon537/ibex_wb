@@ -14,12 +14,11 @@ struct gpio
  * @param module		Pointer to a GPIO instance structure.
  * @param base_address	Pointer to the base address of the GPIO hardware instance.
  */
-void gpio_initialize(struct gpio * module, volatile void * base_address);
+void gpio_init(struct gpio * module, volatile void * base_address);
 
 /*
  * Sets the GPIO direction register.
- * 1 for output
- * 0 for input
+ * 1 for output, 0 for input
  * @param module Pointer to a GPIO instance structure.
  * @param dir    Direction bitmask for the GPIO direction register.
  */

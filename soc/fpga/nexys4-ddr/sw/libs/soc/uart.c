@@ -16,7 +16,7 @@ static int qprints(struct uart * module, char **out, const char *string, int wid
 static int qprinti(struct uart * module, char **out, int i, int b, int sg, int width, int pad, char letbase);
 static int qprint(struct uart * module, char **out, const char *format, va_list va);
 
-void uart_initialize(struct uart * module, volatile void * base_address)
+void uart_init(struct uart * module, volatile void * base_address)
 {
 	module->registers = (volatile uint32_t *)base_address;
 }

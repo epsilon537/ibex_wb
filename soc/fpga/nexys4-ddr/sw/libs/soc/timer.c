@@ -8,7 +8,7 @@
 #define TIMER_CONTROL_RUN	0
 #define TIMER_CONTROL_CLEAR	1
 
-void timer_initialize(struct timer * module, volatile void * base_address)
+void timer_init(struct timer * module, volatile void * base_address)
 {
 	module->registers = base_address;
 }

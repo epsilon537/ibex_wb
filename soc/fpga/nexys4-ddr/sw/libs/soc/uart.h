@@ -30,7 +30,7 @@ struct uart
 	volatile uint32_t * registers;
 };
 
-void uart_initialize(struct uart * module, volatile void * base_address);
+void uart_init(struct uart * module, volatile void * base_address);
 
 void uart_configure(struct uart * module, uint32_t config);
 

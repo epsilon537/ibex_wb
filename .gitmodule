@@ -1,0 +1,2 @@
+[submodule "ibex"]
+	branch = pqcrypto-extensions

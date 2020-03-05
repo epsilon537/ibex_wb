@@ -7,4 +7,4 @@
 *.vmem
 *.mem
 *.hex
-*/nbproject
+*/nbproject/

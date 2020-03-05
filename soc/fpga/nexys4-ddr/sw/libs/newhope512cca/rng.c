@@ -5,8 +5,11 @@
 //  Copyright © 2017 Bassham, Lawrence E (Fed). All rights reserved.
 //
 
-#include <string.h>
 #include "rng.h"
+
+#ifndef SIMPLE_RNG
+
+#include <string.h>
 #include <openssl/conf.h>
 #include <openssl/evp.h>
 #include <openssl/err.h>
@@ -212,11 +215,16 @@ AES256_CTR_DRBG_Update(unsigned char *provided_data,
     memcpy(V, temp+32, 16);
 }
 
+#else
 
+#include <stdlib.h>
 
+int randombytes(unsigned char *x, unsigned long long xlen)
+{
+	for (unsigned long long i = 0; i < xlen; i++)
+		x[i] = (char) rand();
+	
+	return 0;
+}
 
-
-
-
-
-
+#endif

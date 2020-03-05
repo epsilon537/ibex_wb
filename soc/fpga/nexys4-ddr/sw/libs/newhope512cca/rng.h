@@ -8,6 +8,8 @@
 #ifndef rng_h
 #define rng_h
 
+#ifndef SIMPLE_RNG
+
 #include <stdio.h>
 
 #define RNG_SUCCESS      0
@@ -48,6 +50,8 @@ void
 randombytes_init(unsigned char *entropy_input,
                  unsigned char *personalization_string,
                  int security_strength);
+
+#endif
 
 int
 randombytes(unsigned char *x, unsigned long long xlen);

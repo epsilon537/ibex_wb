@@ -1,7 +1,7 @@
 # Makefile to generate baremetal app
 
 PROGRAM ?= newhope
-PROGRAM_CFLAGS = -Wall -g -O1 -DSIMPLE_RNG
+PROGRAM_CFLAGS = -Wall -g -O1 -DSIMPLE_RNG -DBAM_CUST0
 #ARCH = rv32imc
 ARCH = rv32im
 SRCS = $(PROGRAM).c $(wildcard ../../libs/soc/*.c) $(wildcard ../../libs/newhope512cca/*.c)

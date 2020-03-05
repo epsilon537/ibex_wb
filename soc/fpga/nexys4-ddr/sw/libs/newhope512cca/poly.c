@@ -301,7 +301,19 @@ void poly_sample(poly *r, const unsigned char *seed, unsigned char nonce)
     {
       a = buf[2*j];
       b = buf[2*j+1];
+			
+#ifdef BAM_CUST0
+			asm volatile (
+								"cust0 %[result1], %[value1], %[value2]\n\t"
+								: [result1] "=r" (r->coeffs[64 * i + j])
+								: [value1] "r" (a), [value2] "r" (b)
+								);
+
+			r->coeffs[64 * i + j] += NEWHOPE_Q;
+#else
       r->coeffs[64*i+j] = hw(a) + NEWHOPE_Q - hw(b);
+#endif
+			
       /*
       t = buf[j] | ((uint32_t)buf[j+1] << 8) | ((uint32_t)buf[j+2] << 16) | ((uint32_t)buf[j+3] << 24);
       d = 0;

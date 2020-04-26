@@ -4,45 +4,62 @@
 #include "fips202.h"
 
 /*************************************************
-* Name:        coeff_freeze
-* 
-* Description: Fully reduces an integer modulo q in constant time
-*
-* Arguments:   uint16_t x: input integer to be reduced
-*              
-* Returns integer in {0,...,q-1} congruent to x modulo q
-**************************************************/
+ * Name:        coeff_freeze
+ * 
+ * Description: Fully reduces an integer modulo q in constant time
+ *
+ * Arguments:   uint16_t x: input integer to be reduced
+ *              
+ * Returns integer in {0,...,q-1} congruent to x modulo q
+ **************************************************/
 static uint16_t coeff_freeze(uint16_t x)
 {
-  uint16_t m,r;
+  uint16_t m, r;
   int16_t c;
   r = x % NEWHOPE_Q;
 
+#ifdef BAM_CUST1
+  asm volatile (
+            "cust1 %[result1], %[value1], %[value2]\n\t"
+            : [result1] "=r" (r)
+            : [value1] "r" (r), [value2] "r" (NEWHOPE_Q)
+            );
+#else
   m = r - NEWHOPE_Q;
   c = m;
   c >>= 15;
-  r = m ^ ((r^m)&c);
+  r = m ^ ((r^m) & c);
+#endif
 
   return r;
 }
 
 /*************************************************
-* Name:        flipabs
-* 
-* Description: Computes |(x mod q) - Q/2|
-*
-* Arguments:   uint16_t x: input coefficient
-*              
-* Returns |(x mod q) - Q/2|
-**************************************************/
+ * Name:        flipabs
+ * 
+ * Description: Computes |(x mod q) - Q/2|
+ *
+ * Arguments:   uint16_t x: input coefficient
+ *              
+ * Returns |(x mod q) - Q/2|
+ **************************************************/
 static uint16_t flipabs(uint16_t x)
 {
-  int16_t r,m;
+  int16_t r, m;
   r = coeff_freeze(x);
 
-  r = r - NEWHOPE_Q/2;
+#ifdef BAM_CUST2
+  asm volatile (
+            "cust2 %[result1], %[value1], %[value2]\n\t"
+            : [result1] "=r" (r)
+            : [value1] "r" (r), [value2] "r" (NEWHOPE_Q / 2)
+            );
+#else
+  r = r - NEWHOPE_Q / 2;
   m = r >> 15;
-  return (r + m) ^ m;
+  r = (r + m) ^ m;
+#endif
+  return r;
 }
 
 /*************************************************

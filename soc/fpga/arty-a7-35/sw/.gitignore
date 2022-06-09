@@ -1,0 +1,10 @@
+*.o
+*.d
+*.dis
+*.elf
+*.map
+*.bin
+*.vmem
+*.mem
+*.hex
+**/nbproject/

@@ -7,6 +7,3 @@
 [submodule "riscv-dbg"]
 	path = riscv-dbg
 	url = https://github.com/pbing/riscv-dbg.git
-[submodule "wbuart32"]
-	path = wbuart32
-	url = https://github.com/ZipCPU/wbuart32

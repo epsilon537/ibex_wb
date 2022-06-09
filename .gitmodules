@@ -4,9 +4,6 @@
 [submodule "pulpino"]
 	path = pulpino
 	url = https://github.com/pulp-platform/pulpino.git
-[submodule "ibex"]
-	path = ibex
-	url = https://github.com/batuhanates/ibex.git
 [submodule "riscv-dbg"]
 	path = riscv-dbg
 	url = https://github.com/pbing/riscv-dbg.git

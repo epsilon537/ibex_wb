@@ -38,58 +38,59 @@ module wb_ibex_core
    core_if instr_core(.*);
    core_if data_core(.*);
 
-`ifdef USE_TRACER
-   ibex_core_tracing
-`else
-     ibex_core
-`endif
-       #(.PMPEnable                (PMPEnable),
-         .PMPGranularity           (PMPGranularity),
-         .PMPNumRegions            (PMPNumRegions),
-         .MHPMCounterNum           (MHPMCounterNum),
-         .MHPMCounterWidth         (MHPMCounterWidth),
-         .RV32E                    (RV32E),
-         .RV32M                    (RV32M),
-         .MultiplierImplementation (MultiplierImplementation),
-         .DbgTriggerEn             (DbgTriggerEn),
-         .DmHaltAddr               (DmHaltAddr),
-         .DmExceptionAddr          (DmExceptionAddr))
-   inst_ibex_core
-     (.clk_i          (clk),
-      .rst_ni         (rst_n),
+   ibex_top #(
+     .RV32M(ibex_pkg::RV32MFast),
+     .RV32B(ibex_pkg::RV32BBalanced),
+     .RegFile(ibex_pkg::RegFileFPGA),
+     .DmHaltAddr(DmHaltAddr),
+     .DmExceptionAddr(DmExceptionAddr)
+   ) u_top (
+     .clk_i                 (clk),
+     .rst_ni                (rst_n),
 
-      .test_en_i      (test_en),
-      .hart_id_i      (hart_id),
-      .boot_addr_i    (boot_addr),
+     .test_en_i             (test_en),
+     .scan_rst_ni           (1'b1),
+     .ram_cfg_i             ('b0),
 
-      .instr_req_o    (instr_core.req),    // Request valid, must stay high until instr_gnt is high for one cycle
-      .instr_gnt_i    (instr_core.gnt),    // The other side accepted the request. instr_req may be deasserted in the next cycle.
-      .instr_rvalid_i (instr_core.rvalid), // instr_rdata holds valid data when instr_rvalid is high. This signal will be high for exactly one cycle per request.
-      .instr_addr_o   (instr_core.addr),   // Address, word aligned
-      .instr_rdata_i  (instr_core.rdata),  // Data read from memory
-      .instr_err_i    (instr_core.err),    // Error response from the bus or the memory: request cannot be handled. High in case of an error.
+     .hart_id_i             (hart_id),
+     // First instruction executed is at 0x0 + 0x80
+     .boot_addr_i           (boot_addr),
 
-      .data_req_o     (data_core.req),     // Request valid, must stay high until data_gnt is high for one cycle
-      .data_gnt_i     (data_core.gnt),     // The other side accepted the request. data_req may be deasserted in the next cycle.
-      .data_rvalid_i  (data_core.rvalid),  // data_rdata holds valid data when data_rvalid is high.
-      .data_we_o      (data_core.we),      // Write Enable, high for writes, low for reads. Sent together with data_req
-      .data_be_o      (data_core.be),      // Byte Enable. Is set for the bytes to write/read, sent together with data_req
-      .data_addr_o    (data_core.addr),    // Address, word aligned
-      .data_wdata_o   (data_core.wdata),   // Data to be written to memory, sent together with data_req
-      .data_rdata_i   (data_core.rdata),   // Data read from memory
-      .data_err_i     (data_core.err),     // Error response from the bus or the memory: request cannot be handled. High in case of an error.
+     .instr_req_o    (instr_core.req),    // Request valid, must stay high until instr_gnt is high for one cycle
+     .instr_gnt_i    (instr_core.gnt),    // The other side accepted the request. instr_req may be deasserted in the next cycle.
+     .instr_rvalid_i (instr_core.rvalid), // instr_rdata holds valid data when instr_rvalid is high. This signal will be high for exactly one cycle per request.
+     .instr_addr_o   (instr_core.addr),   // Address, word aligned
+     .instr_rdata_i  (instr_core.rdata),  // Data read from memory
+     .instr_rdata_intg_i    ('0),
+     .instr_err_i    (instr_core.err),    // Error response from the bus or the memory: request cannot be handled. High in case of an error.
 
-      .irq_software_i (irq_software),
-      .irq_timer_i    (irq_timer),
-      .irq_external_i (irq_external),
-      .irq_fast_i     (irq_fast),
-      .irq_nm_i       (irq_nm),
+     .data_req_o     (data_core.req),     // Request valid, must stay high until data_gnt is high for one cycle
+     .data_gnt_i     (data_core.gnt),     // The other side accepted the request. data_req may be deasserted in the next cycle.
+     .data_rvalid_i  (data_core.rvalid),  // data_rdata holds valid data when data_rvalid is high.
+     .data_we_o      (data_core.we),      // Write Enable, high for writes, low for reads. Sent together with data_req
+     .data_be_o      (data_core.be),      // Byte Enable. Is set for the bytes to write/read, sent together with data_req
+     .data_addr_o    (data_core.addr),    // Address, word aligned
+     .data_wdata_o   (data_core.wdata),   // Data to be written to memory, sent together with data_req
+     .data_wdata_intg_o     (),
+     .data_rdata_i   (data_core.rdata),   // Data read from memory
+     .data_rdata_intg_i     ('0),
+     .data_err_i     (data_core.err),     // Error response from the bus or the memory: request cannot be handled. High in case of an error.
 
-      .debug_req_i    (debug_req),
+     .irq_software_i (irq_software),
+     .irq_timer_i    (irq_timer),
+     .irq_external_i (irq_external),
+     .irq_fast_i     (irq_fast),
+     .irq_nm_i       (irq_nm),
 
-      .fetch_enable_i (fetch_enable),
-      .core_sleep_o   (core_sleep));
-
+     .debug_req_i    (debug_req),
+     .crash_dump_o          (),
+     .fetch_enable_i (fetch_enable),
+     .alert_minor_o         (),
+     .alert_major_internal_o(),
+     .alert_major_bus_o     (),
+     .core_sleep_o   (core_sleep)
+  );
+  
    /* Wishbone */
    assign instr_core.we    = 1'b0;
    assign instr_core.be    = '0;

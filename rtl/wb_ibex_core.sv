@@ -4,16 +4,17 @@
 
 module wb_ibex_core
   #(parameter bit          PMPEnable        = 1'b0,           // Enable PMP support
-    parameter int unsigned PMPGranularity   = 0,              // Minimum granularity of PMP address matching
-    parameter int unsigned PMPNumRegions    = 4,              // Number implemented PMP regions (ignored if PMPEnable == 0)
-    parameter int unsigned MHPMCounterNum   = 0,              // Number of performance monitor event counters
-    parameter int unsigned MHPMCounterWidth = 40,             // Bit width of performance monitor event counters
-    parameter bit          RV32E            = 1'b0,           // RV32E mode enable (16 integer registers only)
-    parameter bit          RV32M            = 1'b1,           // M(ultiply) extension enable
-    parameter              MultiplierImplementation = "fast", // Multiplicator type, “slow”, or “fast”
-    parameter bit          DbgTriggerEn     = 1'b0,           // Enable debug trigger support (one trigger only)
-    parameter int unsigned DmHaltAddr       = 32'h1A110800,   // Address to jump to when entering debug mode
-    parameter int unsigned DmExceptionAddr  = 32'h1A110808)   // Address to jump to when an exception occurs while in debug mode
+    parameter int unsigned PMPGranularity = 0, // Minimum granularity of PMP address matching
+    parameter int unsigned PMPNumRegions = 4, // Number implemented PMP regions (ignored if PMPEnable == 0)
+    parameter int unsigned MHPMCounterNum = 0, // Number of performance monitor event counters
+    parameter int unsigned MHPMCounterWidth = 40, // Bit width of performance monitor event counters
+    parameter bit 	   RV32E = 1'b0, // RV32E mode enable (16 integer registers only)
+    parameter ibex_pkg::rv32m_e RV32M = ibex_pkg::RV32MNone, // M(ultiply) extension enable
+    parameter ibex_pkg::rv32b_e RV32B = ibex_pkg::RV32BNone, 	   
+    parameter MultiplierImplementation = "fast", // Multiplicator type, “slow”, or “fast”
+    parameter bit 	   DbgTriggerEn = 1'b0, // Enable debug trigger support (one trigger only)
+    parameter int unsigned DmHaltAddr = 32'h1A110800, // Address to jump to when entering debug mode
+    parameter int unsigned DmExceptionAddr = 32'h1A110808)   // Address to jump to when an exception occurs while in debug mode
    (input  wire         clk,                                  // Clock signal
     input  wire         rst_n,                                // Active-low asynchronous reset
     wb_if.master        instr_wb,                             // Wishbone interface for instruction memory
@@ -39,8 +40,9 @@ module wb_ibex_core
    core_if data_core(.*);
 
    ibex_top #(
-     .RV32M(ibex_pkg::RV32MFast),
-     .RV32B(ibex_pkg::RV32BBalanced),
+     .RV32E(RV32E),
+     .RV32M(RV32M),
+     .RV32B(RV32B),
      .RegFile(ibex_pkg::RegFileFPGA),
      .DmHaltAddr(DmHaltAddr),
      .DmExceptionAddr(DmExceptionAddr)

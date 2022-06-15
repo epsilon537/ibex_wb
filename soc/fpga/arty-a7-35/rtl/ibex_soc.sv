@@ -130,7 +130,10 @@ module ibex_soc(
    assign rst_n = ck_rst_n;
    `endif
    
-  wb_ibex_core wb_ibex_core (
+  wb_ibex_core #(
+    .RV32M(ibex_pkg::RV32MFast),
+    .RV32B(ibex_pkg::RV32BBalanced)
+  )wb_ibex_core (
     .instr_wb     (wbm[COREI_M]),
     .data_wb      (wbm[CORED_M]),
     .test_en      (1'b0),

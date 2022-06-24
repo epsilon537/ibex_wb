@@ -11,7 +11,6 @@ module wb_ibex_core
     parameter bit 	   RV32E = 1'b0, // RV32E mode enable (16 integer registers only)
     parameter ibex_pkg::rv32m_e RV32M = ibex_pkg::RV32MNone, // M(ultiply) extension enable
     parameter ibex_pkg::rv32b_e RV32B = ibex_pkg::RV32BNone, 	   
-    parameter MultiplierImplementation = "fast", // Multiplicator type, “slow”, or “fast”
     parameter bit 	   DbgTriggerEn = 1'b0, // Enable debug trigger support (one trigger only)
     parameter int unsigned DmHaltAddr = 32'h1A110800, // Address to jump to when entering debug mode
     parameter int unsigned DmExceptionAddr = 32'h1A110808)   // Address to jump to when an exception occurs while in debug mode

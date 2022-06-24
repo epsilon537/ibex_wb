@@ -21,11 +21,7 @@
 
 `default_nettype	none
 
-module wb_wbuart_wrap #(
-    parameter [30:0]  INITIAL_SETUP = 31'd25,
-    parameter [3:0]	  LGFLEN = 4,
-    parameter [0:0]   HARDWARE_FLOW_CONTROL_PRESENT = 1'b1
-  )(
+module wb_wbuart_wrap (
     wb_if.slave wb,
     
     input  wire i_uart_rx,
@@ -50,11 +46,7 @@ module wb_wbuart_wrap #(
       default: addr = 2'b01;
     endcase
   
-  wbuart #(
-    .INITIAL_SETUP                  (INITIAL_SETUP),
-    .LGFLEN                         (LGFLEN),
-    .HARDWARE_FLOW_CONTROL_PRESENT  (HARDWARE_FLOW_CONTROL_PRESENT)
-  ) wbuart (
+  wbuart_0 wbuart (
     .i_clk              (wb.clk),
     .i_reset            (wb.rst),
     .i_wb_cyc           (wb.cyc),

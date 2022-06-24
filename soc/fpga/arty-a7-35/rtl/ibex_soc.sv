@@ -129,11 +129,14 @@ module ibex_soc(
    assign clk = clk100mhz;
    assign rst_n = ck_rst_n;
    `endif
+  
+  
    
   wb_ibex_core #(
+    .RV32E(1'b0),
     .RV32M(ibex_pkg::RV32MFast),
     .RV32B(ibex_pkg::RV32BBalanced)
-  )wb_ibex_core (
+  ) wb_ibex_core (
     .instr_wb     (wbm[COREI_M]),
     .data_wb      (wbm[CORED_M]),
     .test_en      (1'b0),
@@ -160,23 +163,15 @@ module ibex_soc(
   ) wb_spram (
     .wb(wbs[RAM_S]));
   
-  wb_gpio #(
-    .size (8)
-  ) wb_gpio0 (
-    .gpio (gpio0),
+  wbgpio_0_wrap wbgpio_0_inst (
+   .gpio (gpio0),
     .wb (wbs[GPIO0_S]));
   
-  wb_gpio #(
-    .size (4)
-  ) wb_gpio1 (
+  wbgpio_1_wrap wbgpio_1_inst (
     .gpio (gpio1),
     .wb (wbs[GPIO1_S]));
   
-  wb_wbuart_wrap #(
-    .HARDWARE_FLOW_CONTROL_PRESENT  (1'b0),
-    .INITIAL_SETUP                  (31'd25),
-    .LGFLEN                         (4'd4)
-  ) wb_uart (
+  wb_wbuart_wrap wb_uart (
     .wb (wbs[UART_S]),
     .i_uart_rx (uart_rx),
     .o_uart_tx (uart_tx),

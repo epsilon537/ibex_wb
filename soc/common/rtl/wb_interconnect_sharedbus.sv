@@ -40,8 +40,13 @@ module wb_interconnect_sharedbus
         assign wbm[i].stall = wbm_stall[i];
         assign wbm_adr[i]   = wbm[i].adr;
         assign wbm_sel[i]   = wbm[i].sel;
-        assign wbm_dat_i[i] = wbm[i].dat_i;
+`ifdef NO_MODPORT_EXPRESSIONS
+        assign wbm_dat_i[i] = wbm[i].dat_m;	
+        assign wbm[i].dat_s = wbm_dat_o[i];
+`else
+	assign wbm_dat_i[i] = wbm[i].dat_i;
         assign wbm[i].dat_o = wbm_dat_o[i];
+`endif
      end
 
    logic [nums - 1:0]       wbs_cyc, wbs_stb, wbs_we, wbs_ack, wbs_err, wbs_stall;
@@ -59,8 +64,14 @@ module wb_interconnect_sharedbus
         assign wbs_stall[i] =  wbs[i].stall;
         assign wbs[i].adr   =    wbs_adr[i];
         assign wbs[i].sel   =    wbs_sel[i];
-        assign wbs[i].dat_o =  wbs_dat_o[i];
+`ifdef NO_MODPORT_EXPRESSIONS
+        assign wbs[i].dat_m =  wbs_dat_o[i];
+        assign wbs_dat_i[i] =  wbs[i].dat_s;
+
+`else
+	assign wbs[i].dat_o =  wbs_dat_o[i];
         assign wbs_dat_i[i] =  wbs[i].dat_i;
+`endif
      end
 
    /********************************************************************************/

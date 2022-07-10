@@ -52,7 +52,7 @@ module wb_ibex_core
 
      .test_en_i             (test_en),
      .scan_rst_ni           (1'b1),
-     .ram_cfg_i             ('b0),
+     .ram_cfg_i             (10'b0),
 
      .hart_id_i             (hart_id),
      // First instruction executed is at 0x0 + 0x80

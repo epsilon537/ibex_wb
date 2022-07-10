@@ -61,12 +61,19 @@ module wb_wbuart_wrap #(
     .i_wb_stb           (wb.stb & wb.cyc),
     .i_wb_we            (wb.we),
     .i_wb_addr          (addr),
+`ifdef NO_MODPORT_EXPRESSIONS
+    .i_wb_data          (wb.dat_m),	    
+`else	    
     .i_wb_data          (wb.dat_i),
+`endif	    
     .i_wb_sel           (4'b1111),
     .o_wb_ack           (wb.ack),
     .o_wb_stall         (wb.stall),
-    .o_wb_data          (wb.dat_o),
-    
+`ifdef NO_MODPORT_EXPRESSIONS		    
+    .o_wb_data          (wb.dat_s),
+`else
+    .o_wb_data          (wb.dat_o),	    
+`endif    
     .i_uart_rx          (i_uart_rx),
     .o_uart_tx          (o_uart_tx),
     

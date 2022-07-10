@@ -11,10 +11,18 @@ module core2wb
    assign core.gnt    = core.req & ~wb.stall;
    assign core.rvalid = wb.ack;
    assign core.err    = wb.err;
-   assign core.rdata  = wb.dat_i;
+`ifdef NO_MODPORT_EXPRESSIONS   
+   assign core.rdata  = wb.dat_s;
+`else
+   assign core.rdata  = wb.dat_i;   
+`endif   
    assign wb.stb      = core.req;
    assign wb.adr      = core.addr;
+`ifdef NO_MODPORT_EXPRESSIONS
+   assign wb.dat_m    = core.wdata;
+`else
    assign wb.dat_o    = core.wdata;
+`endif
    assign wb.we       = core.we;
    assign wb.sel      = core.we ? core.be : '1;
 

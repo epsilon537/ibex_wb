@@ -26,7 +26,7 @@ module wb_gpio #(
     inout wire [size-1:0] gpio,
     wb_if.slave           wb
   );
-  
+
   logic [size-1:0] input_reg;
   logic [size-1:0] output_reg    = 'b0;
   logic [size-1:0] direction_reg = 'b0;
@@ -42,31 +42,48 @@ module wb_gpio #(
   assign wb.stall = 1'b0;
   assign wb.err = 1'b0;
   
-  always @(posedge wb.clk or posedge wb.rst)
+  always_ff @(posedge wb.clk)
     if (wb.rst) begin
-      direction_reg <= '0;
-      output_reg <= '0;
+       direction_reg <= '0;
+       output_reg <= '0;
+       wb.ack <= 1'b0;
+`ifdef NO_MODPORT_EXPRESSIONS       
+       wb.dat_s <= '0;
+`else
+       wb.dat_o <= '0;
+`endif       
     end
-    else if (valid)
-      if (wb.we)
-        case (wb.adr[3:0])
-          4'h4 : output_reg    <= wb.dat_i[size-1:0];
-          4'h8 : direction_reg <= wb.dat_i[size-1:0];
-          default         : ;
-        endcase
+    else 
+      if (valid) begin
+	 wb.ack <= ~wb.stall;
+	 if (wb.we)
+           case (wb.adr[3:0])
+`ifdef NO_MODPORT_EXPRESSIONS
+             4'h4 : output_reg    <= wb.dat_m[size-1:0];
+             4'h8 : direction_reg <= wb.dat_m[size-1:0];
+`else	  
+             4'h4 : output_reg    <= wb.dat_i[size-1:0];
+             4'h8 : direction_reg <= wb.dat_i[size-1:0];
+`endif	  
+             default         : ;
+           endcase
+	 else
+           case (wb.adr[3:0])
+`ifdef NO_MODPORT_EXPRESSIONS	  
+             4'h0 : wb.dat_s <= input_reg;
+             4'h4 : wb.dat_s <= output_reg;
+             4'h8 : wb.dat_s <= direction_reg;
+`else
+             4'h0 : wb.dat_o <= input_reg;
+             4'h4 : wb.dat_o <= output_reg;
+             4'h8 : wb.dat_o <= direction_reg;	  
+`endif
+             default         : ;	  
+           endcase
+      end
       else
-        case (wb.adr[3:0])
-          4'h0 : wb.dat_o <= input_reg;
-          4'h4 : wb.dat_o <= output_reg;
-          4'h8 : wb.dat_o <= direction_reg;
-          default         : ;
-        endcase
-        
-  always_ff @(posedge wb.clk or posedge wb.rst)
-    if (wb.rst)
-      wb.ack <= 1'b0;
-    else
-      wb.ack <= valid & ~wb.stall;
+	wb.ack <= 1'b0;
+   
 endmodule
 
 `resetall

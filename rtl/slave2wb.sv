@@ -13,8 +13,13 @@ module slave2wb
    assign slave.we    = wb.we;
    assign slave.addr  = wb.adr;
    assign slave.be    = wb.sel;
+`ifdef NO_MODPORT_EXPRESSIONS   
+   assign slave.wdata = wb.dat_m;
+   assign wb.dat_s    = slave.rdata;
+`else
    assign slave.wdata = wb.dat_i;
    assign wb.dat_o    = slave.rdata;
+`endif
    assign wb.stall    = ~slave.gnt;
    assign wb.err      = slave.err;
 

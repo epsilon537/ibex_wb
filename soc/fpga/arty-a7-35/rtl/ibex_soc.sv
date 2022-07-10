@@ -63,7 +63,7 @@ module ibex_soc(
   wb_if wbs[NrSlave](.*);
   
   // define the macro if you want to use debugger
-  `ifdef DEBUG_MODULE_ACTIVE
+`ifdef DEBUG_MODULE_ACTIVE
   
   logic          core_sleep;
   logic          ndmreset;
@@ -112,12 +112,13 @@ module ibex_soc(
     .td_i             (tdi),
     .td_o             (tdo_o),
     .tdo_oe_o         (tdo_oe));
-  `else
+`else
    logic 	 core_sleep;
    logic 	 ndmreset;
    logic 	 dmactive;
-   logic 	 debug_req;
-  `endif
+
+   assign tdo = 1'bz;
+`endif
 
    `ifdef SYNTHESIS
   clkgen_xil7series clkgen (

@@ -31,15 +31,19 @@ module wb_spramx32
    assign ram_addr = wb.adr[addr_width + 1 : 2];
    assign ram_ce   = valid;
    assign ram_we   = {4{wb.we}} & wb.sel;
-   assign ram_d    = wb.dat_i;
+`ifdef NO_MODPORT_EXPRESSIONS   
+   assign ram_d    = wb.dat_m;
+   assign wb.dat_s = ram_q;
+`else
+   assign ram_d    = wb.dat_i;   
    assign wb.dat_o = ram_q;
-
+`endif   
    /* Wishbone control */
    assign valid    = wb.cyc & wb.stb;
    assign wb.stall = 1'b0;
    assign wb.err   = 1'b0;
 
-   always_ff @(posedge wb.clk or posedge wb.rst)
+   always_ff @(posedge wb.clk)
      if (wb.rst)
        wb.ack <= 1'b0;
      else

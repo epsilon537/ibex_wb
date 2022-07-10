@@ -33,23 +33,38 @@ module wb_timer(
     assign wb.stall = 1'b0;
     assign wb.err = 1'b0;
     
-    always @(posedge wb.clk or posedge wb.rst)
+    always @(posedge wb.clk)
         if (wb.rst) begin
             control_reg <= '0;
             counter_reg <= '0;
+`ifdef NO_MODPORT_EXPRESSIONS	   
+	    wb.dat_s <= '0;
+`else
+	    wb.dat_o <= '0;
+`endif	   
         end
         else begin
             if (valid)
                 if (wb.we)
                     case (wb.adr[2:0])
+`ifdef NO_MODPORT_EXPRESSIONS
+                        3'h0 : control_reg <= wb.dat_m;
+                        3'h4 : counter_reg <= wb.dat_m;		      
+`else		      
                         3'h0 : control_reg <= wb.dat_i;
                         3'h4 : counter_reg <= wb.dat_i;
+`endif		      
                         default : ;
                     endcase
                 else
                     case (wb.adr[2:0])
+`ifdef NO_MODPORT_EXPRESSIONS		      
+                        3'h0 : wb.dat_s <= control_reg;
+                        3'h4 : wb.dat_s <= counter_reg;
+`else
                         3'h0 : wb.dat_o <= control_reg;
-                        3'h4 : wb.dat_o <= counter_reg;
+                        3'h4 : wb.dat_o <= counter_reg;		      
+`endif		      
                         default : ;
                     endcase
                     

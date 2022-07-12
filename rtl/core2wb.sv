@@ -26,7 +26,7 @@ module core2wb
    assign wb.we       = core.we;
    assign wb.sel      = core.we ? core.be : '1;
 
-   always_ff @(posedge wb.clk or posedge wb.rst)
+   always_ff @(posedge wb.clk)
      if (wb.rst)
        cyc <= 1'b0;
      else

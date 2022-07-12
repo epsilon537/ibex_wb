@@ -197,7 +197,9 @@ module wb_interconnect_sharedbus
        end
 
 `ifndef SYNTHESIS
+`ifndef VERILATOR
    gnt_onehot0: assert property(@(posedge wbm[0].clk) disable iff(wbm[0].rst) $onehot0(gnt));
+`endif
 `endif
 endmodule
 

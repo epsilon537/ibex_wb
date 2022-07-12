@@ -17,12 +17,7 @@ module ibex_soc(
   input  wire       tdi,
   output wire       tdo
   );
-  
-  logic clk;
-  logic rst, rst_n;
-  
-  assign rst = ~rst_n;
-  
+    
   typedef enum {
     //DM_M,
     COREI_M,
@@ -40,25 +35,37 @@ module ibex_soc(
   
   localparam NrMaster = 2;
   localparam NrSlave = 5;
+
+  typedef logic [31:0] Wb_base_addr [NrSlave];
+
+  function Wb_base_addr wb_base_addresses();
+     wb_base_addresses[RAM_S] = 32'h00000000;
+     wb_base_addresses[GPIO0_S] = 32'h10000000;
+     wb_base_addresses[GPIO1_S] = 32'h10000010;
+     wb_base_addresses[UART_S] = 32'h10010000;
+     wb_base_addresses[TIMER_S] =  32'h10020000;
+  endfunction
+
+  localparam Wb_base_addr wb_base_addr = wb_base_addresses();
+   
+  typedef logic [31:0] Wb_size [NrSlave];
+
+  //These are address range sizes in bytes
+  function Wb_size wb_sizes();
+    wb_sizes[RAM_S] = 32'h10000;
+    wb_sizes[GPIO0_S] = 32'h00010; 
+    wb_sizes[GPIO1_S] = 32'h00010; 
+    wb_sizes[UART_S] = 32'h00010; 
+    wb_sizes[TIMER_S] = 32'h00010; 
+  endfunction
+
+  localparam Wb_size wb_size = wb_sizes();
+    
+  logic clk;
+  logic rst, rst_n;
   
-  localparam [31:0] wb_base_addr [NrSlave] = {
-    //'h1A110000, //DMS
-    'h00000000, //RAM
-    'h10000000, //GPIO0
-    'h10000010, //GPIO1
-    'h10010000, //UART
-    'h10020000  //TIMER
-  };
-  
-  localparam [31:0] wb_size [NrSlave] = {
-    //'h10000, //DMS
-    'h10000, //RAM
-    'h00010, //GPIO0
-    'h00010, //GPIO1
-    'h00010, //UART
-    'h00010  //TIMER
-  };
-  
+  assign rst = ~rst_n;
+
   wb_if wbm[NrMaster](.*);
   wb_if wbs[NrSlave](.*);
   
@@ -114,9 +121,9 @@ module ibex_soc(
     .tdo_oe_o         (tdo_oe));
 `else
    logic 	 core_sleep;
-   logic 	 ndmreset;
-   logic 	 dmactive;
 
+   logic 	 unused = &{1'b0, tck, trst_n, tms, tdi, core_sleep, 1'b0};
+   
    assign tdo = 1'bz;
 `endif
 
@@ -134,7 +141,7 @@ module ibex_soc(
   wb_ibex_core #(
     .RV32M(ibex_pkg::RV32MFast),
     .RV32B(ibex_pkg::RV32BBalanced)
-  )wb_ibex_core (
+  ) wb_ibex_core (
     .instr_wb     (wbm[COREI_M]),
     .data_wb      (wbm[CORED_M]),
     .test_en      (1'b0),
@@ -145,7 +152,8 @@ module ibex_soc(
     .irq_external (1'b0),
     .irq_fast     (15'b0),
     .irq_nm       (1'b0),
-    .fetch_enable (1'b1),
+    .debug_req    (1'b0),
+    .fetch_enable (4'b1),
     .*);
 
   wb_interconnect_sharedbus #(
@@ -181,7 +189,12 @@ module ibex_soc(
     .wb (wbs[UART_S]),
     .i_uart_rx (uart_rx),
     .o_uart_tx (uart_tx),
-    .i_cts_n   (1'b0));
+    .i_cts_n   (1'b0),
+    .o_rts_n(),
+    .o_uart_rx_int(),
+    .o_uart_tx_int(),
+    .o_uart_rxfifo_int(),
+    .o_uart_txfifo_int());
 
   wb_timer timer (
     .wb (wbs[TIMER_S]));

@@ -27,6 +27,8 @@ module wb_gpio #(
     wb_if.slave           wb
   );
 
+  logic unused = &{1'b0, wb.adr[31:4], wb.sel, 1'b0};
+   
   logic [size-1:0] input_reg;
   logic [size-1:0] output_reg    = 'b0;
   logic [size-1:0] direction_reg = 'b0;
@@ -70,13 +72,13 @@ module wb_gpio #(
 	 else
            case (wb.adr[3:0])
 `ifdef NO_MODPORT_EXPRESSIONS	  
-             4'h0 : wb.dat_s <= input_reg;
-             4'h4 : wb.dat_s <= output_reg;
-             4'h8 : wb.dat_s <= direction_reg;
+             4'h0 : wb.dat_s <= 32'(input_reg);
+             4'h4 : wb.dat_s <= 32'(output_reg);
+             4'h8 : wb.dat_s <= 32'(direction_reg);
 `else
-             4'h0 : wb.dat_o <= input_reg;
-             4'h4 : wb.dat_o <= output_reg;
-             4'h8 : wb.dat_o <= direction_reg;	  
+             4'h0 : wb.dat_o <= 32'(input_reg);
+             4'h4 : wb.dat_o <= 32'(output_reg);
+             4'h8 : wb.dat_o <= 32'(direction_reg);	  
 `endif
              default         : ;	  
            endcase

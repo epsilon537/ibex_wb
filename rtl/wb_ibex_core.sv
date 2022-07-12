@@ -1,17 +1,15 @@
 /* RISC-V Ibex core with Wishbone B4 interface */
 
-`default_nettype none
-
-module wb_ibex_core
+module wb_ibex_core import ibex_pkg::*;
   #(parameter bit          PMPEnable        = 1'b0,           // Enable PMP support
     parameter int unsigned PMPGranularity = 0, // Minimum granularity of PMP address matching
     parameter int unsigned PMPNumRegions = 4, // Number implemented PMP regions (ignored if PMPEnable == 0)
     parameter int unsigned MHPMCounterNum = 0, // Number of performance monitor event counters
     parameter int unsigned MHPMCounterWidth = 40, // Bit width of performance monitor event counters
     parameter bit 	   RV32E = 1'b0, // RV32E mode enable (16 integer registers only)
-    parameter ibex_pkg::rv32m_e RV32M = ibex_pkg::RV32MNone, // M(ultiply) extension enable
-    parameter ibex_pkg::rv32b_e RV32B = ibex_pkg::RV32BNone, 	   
-    parameter MultiplierImplementation = "fast", // Multiplicator type, “slow”, or “fast”
+    parameter rv32m_e RV32M = ibex_pkg::RV32MNone, // M(ultiply) extension enable
+    parameter rv32b_e RV32B = ibex_pkg::RV32BNone,
+    parameter regfile_e RegFile = ibex_pkg::RegFileFF, 	   
     parameter bit 	   DbgTriggerEn = 1'b0, // Enable debug trigger support (one trigger only)
     parameter int unsigned DmHaltAddr = 32'h1A110800, // Address to jump to when entering debug mode
     parameter int unsigned DmExceptionAddr = 32'h1A110808)   // Address to jump to when an exception occurs while in debug mode
@@ -33,17 +31,26 @@ module wb_ibex_core
 
     input  wire         debug_req,                            // Request to enter debug mode
 
-    input  wire         fetch_enable,                         // Enable the core, won't fetch when 0
+    input  fetch_enable_t fetch_enable,                       // Enable the core, won't fetch when 0
     output logic        core_sleep);                          // Core in WFI with no outstanding data or instruction accesses.
 
    core_if instr_core(.*);
    core_if data_core(.*);
-
+   
+   // There are missing pins here, but the arty-a7 example in the ibex repository
+   // is instantiated the same way, so I'm sticking to it.
+   // verilator lint_off PINMISSING
    ibex_top #(
+     .PMPEnable(PMPEnable),
+     .PMPGranularity(PMPGranularity),
+     .PMPNumRegions(PMPNumRegions),
+     .MHPMCounterNum(MHPMCounterNum),
+     .MHPMCounterWidth(MHPMCounterWidth),
      .RV32E(RV32E),
      .RV32M(RV32M),
      .RV32B(RV32B),
-     .RegFile(ibex_pkg::RegFileFPGA),
+     .RegFile(RegFile),
+     .DbgTriggerEn(DbgTriggerEn),
      .DmHaltAddr(DmHaltAddr),
      .DmExceptionAddr(DmExceptionAddr)
    ) u_top (
@@ -92,7 +99,9 @@ module wb_ibex_core
      .alert_major_bus_o     (),
      .core_sleep_o   (core_sleep)
   );
-  
+
+   // verilator lint_on PINMISSING
+   
    /* Wishbone */
    assign instr_core.we    = 1'b0;
    assign instr_core.be    = '0;

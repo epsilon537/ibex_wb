@@ -2,8 +2,9 @@
 
 `default_nettype none
 
+// verilator lint_off UNUSED
 interface core_if
-  (input wire clk,
+  (input wire clk,    //FIXME: clk and rst_n are not used so far. Should I hang on to them?
    input wire rst_n);
 
    logic        req;
@@ -55,5 +56,5 @@ interface core_if
       input  rdata,
       input  err);
 endinterface
-
+// verilator lint_on UNUSED
 `resetall

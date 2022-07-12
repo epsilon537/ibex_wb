@@ -14,7 +14,7 @@ module spramx32
     input  wire  [31:0]             d,    // data input
     output logic [31:0]             q);   // data output
 
-   (* ram_decomp = "power" *) logic [31:0] mem[size];
+   (* ram_decomp = "power" *) logic [31:0] mem[size/4];
 
    always @(posedge clk)
      if (ce)

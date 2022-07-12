@@ -77,7 +77,7 @@ module wb_timer(
                     counter_reg <= counter_reg + 1;
         end
                 
-    always_ff @(posedge wb.clk or posedge wb.rst)
+    always_ff @(posedge wb.clk)
         if (wb.rst)
             wb.ack <= 1'b0;
         else

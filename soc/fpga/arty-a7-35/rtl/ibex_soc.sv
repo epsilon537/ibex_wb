@@ -140,7 +140,8 @@ module ibex_soc(
    
   wb_ibex_core #(
     .RV32M(ibex_pkg::RV32MFast),
-    .RV32B(ibex_pkg::RV32BBalanced)
+    .RV32B(ibex_pkg::RV32BBalanced),
+    .RegFile(`PRIM_DEFAULT_IMPL == prim_pkg::ImplGeneric ? ibex_pkg::RegFileFF : ibex_pkg::RegFileFPGA)
   ) wb_ibex_core (
     .instr_wb     (wbm[COREI_M]),
     .data_wb      (wbm[CORED_M]),

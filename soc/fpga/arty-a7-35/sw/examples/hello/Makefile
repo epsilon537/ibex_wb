@@ -52,9 +52,10 @@ $(PROGRAM).elf: $(OBJS) $(LINKER_SCRIPT)
 
 clean:
 	$(RM) -f $(OBJS) $(DEPS) *.hex
-
-distclean: clean
 	$(RM) -f $(OUTFILES) *.map
+
+#distclean: clean
+#	$(RM) -f $(OUTFILES) *.map
 
 run:
 	$(SENDAPP) $(PROGRAM).bin

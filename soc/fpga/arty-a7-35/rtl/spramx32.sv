@@ -31,9 +31,7 @@ module spramx32
        
   if (init_file != "") begin
     initial begin
-      $display("Initializing SRAM from %s", init_file);
       $readmemh(init_file, mem);
-      $display("Done initializing SRAM from %s", init_file);
     end
   end
    

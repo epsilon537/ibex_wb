@@ -23,19 +23,19 @@ int main(void) {
   uart_init(&uart0, (volatile void *) PLATFORM_UART_BASE);
   uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
   uart_printf(&uart0, "Hello, World!\n");
-
+  
   //GPIO1 bits3:0 = 0xf indicate we're running inside a simulator.
   if ((gpio_get_input(&gpio1) & 0xf) == GPIO1_SIM_INDICATOR)
-    uart_printf(&uart0, "Sim.\n");    
+    uart_printf(&uart0, "This is a simulation.\n");    
   else
-    uart_printf(&uart0, "Not Sim.\n");
+    uart_printf(&uart0, "This is not a simulation.\n");
 
   for (;;) {
     gpio_set_output(&gpio0, leds);
     leds ^= 0xF;
 
     if ((gpio_get_input(&gpio1) & 0xf) == GPIO1_SIM_INDICATOR)
-      usleep(500); //Sleep less when we're running inside a simulator.
+      usleep(500 * 10); //Sleep less when we're running inside a simulator.
     else
       usleep(500 * 1000);
   }

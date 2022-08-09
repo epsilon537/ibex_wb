@@ -19,26 +19,38 @@ module ibex_soc(
   );
     
   typedef enum {
-    //DM_M,
+`ifdef DEBUG_MODULE_ACTIVE		
+    DM_M,
+`endif
     COREI_M,
     CORED_M
   } wb_master_e;
   
   typedef enum {
-    //DM_S,
+`ifdef DEBUG_MODULE_ACTIVE		
+    DM_S,
+`endif		
     RAM_S,
     GPIO0_S,
     GPIO1_S,
     UART_S,
     TIMER_S
   } wb_slave_e;
-  
+
+`ifdef DEBUG_MODULE_ACTIVE   
+  localparam NrMaster = 3;
+  localparam NrSlave = 6;
+`else
   localparam NrMaster = 2;
   localparam NrSlave = 5;
-
+`endif
+   
   typedef logic [31:0] Wb_base_addr [NrSlave];
 
   function Wb_base_addr wb_base_addresses();
+`ifdef DEBUG_MODULE_ACTIVE
+     wb_base_addresses[DM_S] = 32'h1A110000;
+`endif     
      wb_base_addresses[RAM_S] = 32'h00000000;
      wb_base_addresses[GPIO0_S] = 32'h10000000;
      wb_base_addresses[GPIO1_S] = 32'h10000010;
@@ -52,6 +64,9 @@ module ibex_soc(
 
   //These are address range sizes in bytes
   function Wb_size wb_sizes();
+`ifdef DEBUG_MODULE_ACTIVE      
+    wb_sizes[DM_S] = 32'h10000;
+`endif
     wb_sizes[RAM_S] = 32'h10000;
     wb_sizes[GPIO0_S] = 32'h00010; 
     wb_sizes[GPIO1_S] = 32'h00010; 
@@ -71,8 +86,6 @@ module ibex_soc(
   
   // define the macro if you want to use debugger
 `ifdef DEBUG_MODULE_ACTIVE
-  
-  logic          core_sleep;
   logic          ndmreset;
   logic          dmactive;
   logic          debug_req;
@@ -97,12 +110,17 @@ module ibex_soc(
 
   wb_dm_top wb_dm (
     .testmode  (1'b0),
+    .ndmreset  (ndmreset),
+    .dmactive  (dmactive),
+    .debug_req (debug_req),
     .wbm       (wbm[DM_M]),
     .wbs       (wbs[DM_S]),
     .dmi_rst_n (dmi_rst_n),
     .*);
 
-  dmi_jtag dmi (
+  dmi_jtag #(
+        .IdcodeValue          ( 32'h249511C3    )
+    ) dmi_jtag_inst (
     .clk_i            (clk),
     .rst_ni           (rst_n),
     .testmode_i       (1'b0),
@@ -119,24 +137,26 @@ module ibex_soc(
     .td_i             (tdi),
     .td_o             (tdo_o),
     .tdo_oe_o         (tdo_oe));
-`else
-   logic 	 core_sleep;
 
-   logic 	 unused = &{1'b0, tck, trst_n, tms, tdi, core_sleep, 1'b0};
-   
+   logic 	 unused = &{1'b0, ndmreset, dmactive, 1'b0};
+`else
+   logic 	 unused = &{1'b0, tck, trst_n, tms, tdi,1'b0};
+   logic 	 debug_req;
+
+   assign debug_req = 1'b0;
    assign tdo = 1'bz;
 `endif
 
-   `ifdef SYNTHESIS
+`ifdef SYNTHESIS
   clkgen_xil7series clkgen (
     .IO_CLK     (clk100mhz),
     .IO_RST_N   (ck_rst_n),
     .clk_sys    (clk),
     .rst_sys_n  (rst_n));
-   `else
+`else
    assign clk = clk100mhz;
    assign rst_n = ck_rst_n;
-   `endif
+`endif
    
   wb_ibex_core #(
     .RV32M(ibex_pkg::RV32MFast),
@@ -153,8 +173,9 @@ module ibex_soc(
     .irq_external (1'b0),
     .irq_fast     (15'b0),
     .irq_nm       (1'b0),
-    .debug_req    (1'b0),
+    .debug_req    (debug_req),
     .fetch_enable (4'b1),
+    .core_sleep   (),
     .*);
 
   wb_interconnect_sharedbus #(

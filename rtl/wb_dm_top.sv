@@ -23,18 +23,11 @@ module wb_dm_top
     input  wire                        dmi_rst_n,
     input  wire                        dmi_req_valid,
     output logic                       dmi_req_ready,
-    input  wire dm::dmi_req_t      dmi_req,
+    input  wire dm::dmi_req_t          dmi_req,
 
     output logic                       dmi_resp_valid,
     input  wire                        dmi_resp_ready,
     output dm::dmi_resp_t              dmi_resp);
-
-   logic                  slave_req;
-   logic                  slave_we;
-   logic [BusWidth-1:0]   slave_addr;
-   logic [BusWidth/8-1:0] slave_be;
-   logic [BusWidth-1:0]   slave_wdata;
-   logic [BusWidth-1:0]   slave_rdata;
 
    core_if slave_core(.*);
    core_if master_core(.*);
@@ -67,8 +60,9 @@ module wb_dm_top
       .master_be_o      (master_core.be),
       .master_gnt_i     (master_core.gnt),
       .master_r_valid_i (master_core.rvalid),
+      .master_r_err_i   (master_core.err),
       .master_r_rdata_i (master_core.rdata),
-
+      .master_r_other_err_i(1'b0),
       .dmi_rst_ni       (dmi_rst_n),
       .dmi_req_valid_i  (dmi_req_valid),
       .dmi_req_ready_o  (dmi_req_ready),

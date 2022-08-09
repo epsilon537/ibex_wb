@@ -23,7 +23,7 @@ module slave2wb
    assign wb.stall    = ~slave.gnt;
    assign wb.err      = slave.err;
 
-   always_ff @(posedge wb.clk or posedge wb.rst)
+   always_ff @(posedge wb.clk)
      if (wb.rst)
        wb.ack <= 1'b0;
      else

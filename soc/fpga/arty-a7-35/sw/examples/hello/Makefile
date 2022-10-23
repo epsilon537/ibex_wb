@@ -22,7 +22,7 @@ LDFLAGS ?= $(CFLAGS) -T $(LINKER_SCRIPT) -Wl,--gc-sections -Wl,--Map,$(PROGRAM).
 OBJS := ${SRCS:.c=.o} ${CRT:.S=.o}
 DEPS = $(OBJS:%.o=%.d)
 
-OUTFILES = $(PROGRAM).elf $(PROGRAM).mem $(PROGRAM).bin $(PROGRAM).dis
+OUTFILES = $(PROGRAM).elf spram.mem $(PROGRAM).bin $(PROGRAM).dis
 
 HEX2VMEM = ../../../scripts/hex2vmem.pl
 SENDAPP = ../../../scripts/sendapp.sh
@@ -31,6 +31,9 @@ all: $(OUTFILES)
 
 $(PROGRAM).elf: $(OBJS) $(LINKER_SCRIPT)
 	$(CC) $(LDFLAGS) $(OBJS) -o $@ $(LIBS)
+
+spram.mem : $(PROGRAM).mem
+	cp -f $< $@
 
 %.dis: %.elf
 	$(OBJDUMP) -SD $^ > $@

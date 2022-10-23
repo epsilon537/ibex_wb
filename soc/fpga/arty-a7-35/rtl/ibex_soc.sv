@@ -77,16 +77,16 @@ module ibex_soc(
   localparam Wb_size wb_size = wb_sizes();
     
   logic clk;
-  logic rst, rst_n;
+  logic rst_n;
+  //Non-Debug-Module-Reset, i.e. reset everything except Debug Module.
+  //Driven by Debug Module itself to implement target reset function.
+  logic ndmreset;
   
-  assign rst = ~rst_n;
-
-  wb_if wbm[NrMaster](.*);
-  wb_if wbs[NrSlave](.*);
+  wb_if wbm[NrMaster](.rst(ndmreset | (~rst_n)), .*);
+  wb_if wbs[NrSlave](.rst(ndmreset | (~rst_n)), .*);
   
   // define the macro if you want to use debugger
 `ifdef DEBUG_MODULE_ACTIVE
-  logic          ndmreset;
   logic          dmactive;
   logic          debug_req;
   logic          unavailable = 1'b0;
@@ -109,6 +109,7 @@ module ibex_soc(
   assign tdo = tdo_oe ? tdo_o : 1'bz;
 
   wb_dm_top wb_dm (
+    .rst_n     (rst_n),
     .testmode  (1'b0),
     .ndmreset  (ndmreset),
     .dmactive  (dmactive),
@@ -138,11 +139,12 @@ module ibex_soc(
     .td_o             (tdo_o),
     .tdo_oe_o         (tdo_oe));
 
-   logic 	 unused = &{1'b0, ndmreset, dmactive, 1'b0};
+   logic 	 unused = &{1'b0, dmactive, 1'b0};
 `else
    logic 	 unused = &{1'b0, tck, trst_n, tms, tdi,1'b0};
    logic 	 debug_req;
 
+   assign ndmreset = 1'b0;
    assign debug_req = 1'b0;
    assign tdo = 1'bz;
 `endif
@@ -163,6 +165,7 @@ module ibex_soc(
     .RV32B(ibex_pkg::RV32BBalanced),
     .RegFile(`PRIM_DEFAULT_IMPL == prim_pkg::ImplGeneric ? ibex_pkg::RegFileFF : ibex_pkg::RegFileFPGA)
   ) wb_ibex_core (
+    .rst_n        (rst_n & (~ndmreset)),
     .instr_wb     (wbm[COREI_M]),
     .data_wb      (wbm[CORED_M]),
     .test_en      (1'b0),
@@ -187,7 +190,7 @@ module ibex_soc(
 
   wb_spramx32 #(
     .size(wb_size[RAM_S]),
-    .init_file("hello.mem")
+    .init_file("spram.mem") //This is the .mem file that our SW build should produce.
   ) wb_spram (
     .wb(wbs[RAM_S]));
   

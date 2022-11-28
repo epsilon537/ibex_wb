@@ -44,7 +44,7 @@ module wb_interconnect_sharedbus
         assign wbm_dat_i[i] = wbm[i].dat_m;	
         assign wbm[i].dat_s = wbm_dat_o[i];
 `else
-	assign wbm_dat_i[i] = wbm[i].dat_i;
+	    assign wbm_dat_i[i] = wbm[i].dat_i;
         assign wbm[i].dat_o = wbm_dat_o[i];
 `endif
      end
@@ -69,7 +69,7 @@ module wb_interconnect_sharedbus
         assign wbs_dat_i[i] =  wbs[i].dat_s;
 
 `else
-	assign wbs[i].dat_o =  wbs_dat_o[i];
+	    assign wbs[i].dat_o =  wbs_dat_o[i];
         assign wbs_dat_i[i] =  wbs[i].dat_i;
 `endif
      end
@@ -140,11 +140,15 @@ module wb_interconnect_sharedbus
         dat_rd = '0;
         for (int i = 0; i < nums; i++)
           begin
-             ack   |= wbs_ack[i];
-             err   |= wbs_err[i];
-             stall |= wbs_stall[i];
+             if (ss[i])
+               stall = wbs_stall[i];
+
              if (ss1[i])
-               dat_rd = wbs_dat_i[i];
+               begin
+                  ack   = wbs_ack[i];
+                  err   = wbs_err[i];
+                  dat_rd = wbs_dat_i[i];
+               end
           end
      end
 
@@ -181,7 +185,7 @@ module wb_interconnect_sharedbus
    always_comb
      for (int i = 0; i < nums; i++)
        begin
-          wbs_cyc[i]   = cyc;
+          wbs_cyc[i]   = '0;
           wbs_adr[i]   = '0;
           wbs_stb[i]   = 1'b0;
           wbs_we[i]    = we;
@@ -189,6 +193,7 @@ module wb_interconnect_sharedbus
           wbs_dat_o[i] = '0;
           if (ss[i])
             begin
+               wbs_cyc[i]  = cyc;
                wbs_adr[i]   = adr;
                wbs_stb[i]   = cyc & stb;
                wbs_sel[i]   = sel;

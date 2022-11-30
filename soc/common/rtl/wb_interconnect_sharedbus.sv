@@ -170,8 +170,8 @@ module wb_interconnect_sharedbus
      begin
         for (int i = 0; i < numm; i++)
           begin
-             wbm_ack[i]   = 1'b0;
-             wbm_err[i]   = 1'b0;
+             wbm_ack[i]   = '0;
+             wbm_err[i]   = '0;
              wbm_dat_o[i] = '0;
              if (gnt1[i])
                begin
@@ -187,15 +187,16 @@ module wb_interconnect_sharedbus
        begin
           wbs_cyc[i]   = '0;
           wbs_adr[i]   = '0;
-          wbs_stb[i]   = 1'b0;
-          wbs_we[i]    = we;
+          wbs_stb[i]   = '0;
+          wbs_we[i]    = '0;
           wbs_sel[i]   = '0;
           wbs_dat_o[i] = '0;
           if (ss[i])
             begin
-               wbs_cyc[i]  = cyc;
+               wbs_cyc[i]   = cyc;
                wbs_adr[i]   = adr;
                wbs_stb[i]   = cyc & stb;
+               wbs_we[i]    = we;
                wbs_sel[i]   = sel;
                wbs_dat_o[i] = dat_wr;
             end

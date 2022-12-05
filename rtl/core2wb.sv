@@ -6,36 +6,64 @@ module core2wb
   (core_if.slave core,
    wb_if.master  wb);
 
-   logic cyc;
+   logic [31:0] wdata;
+   logic [3:0]  sel;
+   logic        we;
+   logic [31:0] adr;
+   logic transaction_ongoing;
+   logic stb;
 
-   assign core.gnt    = core.req & ~wb.stall;
-   assign core.rvalid = wb.ack;
-   assign core.err    = wb.err;
-`ifdef NO_MODPORT_EXPRESSIONS   
+   assign core.rvalid = wb.ack & transaction_ongoing;
+   assign core.gnt = ~transaction_ongoing;
+   assign core.err = wb.err & transaction_ongoing;
+`ifdef NO_MODPORT_EXPRESSIONS
    assign core.rdata  = wb.dat_s;
 `else
-   assign core.rdata  = wb.dat_i;   
-`endif   
-   assign wb.stb      = core.req;
-   assign wb.adr      = core.addr;
-`ifdef NO_MODPORT_EXPRESSIONS
-   assign wb.dat_m    = core.wdata;
-`else
-   assign wb.dat_o    = core.wdata;
+   assign core.rdata  = wb.dat_i;
 `endif
-   assign wb.we       = core.we;
-   assign wb.sel      = core.we ? core.be : '1;
+
+   initial transaction_ongoing = 1'b0;
+   initial stb = 1'b0;
+
+   /*One transfer per WB CYC bus cycle.*/
 
    always_ff @(posedge wb.clk)
-     if (wb.rst)
-       cyc <= 1'b0;
+     if (wb.rst) begin
+        transaction_ongoing <= 1'b0;
+        stb <= 1'b0;
+     end
      else
-       if (core.req)
-         cyc <= 1'b1;
-       else if (wb.ack || wb.err)
-         cyc <= 1'b0;
+       if (transaction_ongoing) begin
+          if (!wb.stall)
+            stb <= 1'b0; /*pipelined WB. For one transaction STB should only be high for one cycle after master has been granted access (through !stall).*/
 
-   assign wb.cyc = core.req | cyc;
+          if (wb.ack || wb.err) begin
+             transaction_ongoing <= 1'b0;
+             stb <= 1'b0;
+          end
+       end
+       else begin
+          if (core.req) begin
+             transaction_ongoing <= 1'b1;
+             stb <= 1'b1;
+             wdata <= core.wdata;
+             adr <= core.addr;
+             sel <= core.we ? core.be : '1;
+             we <= core.we;
+          end
+       end
+
+   assign wb.cyc = transaction_ongoing;
+   assign wb.stb = stb;
+   assign wb.adr = adr;
+   assign wb.we = we;
+   assign wb.sel = sel;
+`ifdef NO_MODPORT_EXPRESSIONS
+   assign wb.dat_m    = wdata;
+`else
+   assign wb.dat_o    = wdata;
+`endif
+
 endmodule
 
 `resetall

@@ -7,9 +7,9 @@
 
 module wb_interconnect_sharedbus
   #(parameter numm = 1,                          // number of masters
-    parameter            nums = 1, // number of slaves
+    parameter            nums = 1,               // number of slaves
     parameter bit [31:0] base_addr[nums] = '{0}, // base addresses of slaves
-    parameter bit [31:0] size[nums] = '{0}) // address size of slaves
+    parameter bit [31:0] size[nums] = '{0})      // address size of slaves
    (wb_if.slave  wbm[numm],                      // Wishbone master interfaces
     wb_if.master wbs[nums]);                     // Wishbone slave interfaces
    logic                 cyc, stb, we, ack, err, stall;
@@ -72,7 +72,9 @@ module wb_interconnect_sharedbus
 `endif
    end
 
-   /* priority arbiter */
+   /* Priority arbiter. When in an idle state,
+    * grant the bus to lowest order bus master that's requesting access to the bus.
+    * gnt is registered and remains asserted for one complete WB CYC transaction.*/
    always_ff @(posedge wbm[0].clk)
      if (wbm[0].rst) begin
         gnt <= '0;
@@ -109,12 +111,12 @@ module wb_interconnect_sharedbus
       end
    end
 
-   /* slave address select */
+   /* slave address select - combinatorial.*/
    always_comb
      for (int i = 0; i < nums; i++)
        ss[i] = (adr >= base_addr[i]) && (adr < base_addr[i] + size[i]);
 
-   /*slave to bus*/
+   /* slave to bus - aggregate return signals. For read data, switch to selected slave.*/
    always_comb begin
       ack    = |wbs_ack;
       err    = |wbs_err;
@@ -136,7 +138,7 @@ module wb_interconnect_sharedbus
         wbm_err[i]   = '0;
         wbm_dat_o[i] = '0;
         if (gnt[i]) begin
-           wbm_stall[i] = stall; /*..except master that is granted the bus. There we forward the slave's stall signal.*/
+           wbm_stall[i] = stall; /*..except master that is granted the bus. There, we forward the slave's stall signal.*/
            wbm_ack[i]   = ack;
            wbm_err[i]   = err;
            wbm_dat_o[i] = dat_rd;

@@ -57,3 +57,4 @@ For Vivado 2019.2 use branch `master` in all submodules.
 ## Recources
 - [Wishbone at opencores.org](https://opencores.org/howto/wishbone)
 - [ZipCPU](http://zipcpu.com/zipcpu/2017/11/07/wb-formal.html) for a deeper understanding of the pipelined mode.
+

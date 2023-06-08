@@ -25,6 +25,10 @@
 #endif
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct uart
 {
 	volatile uint32_t * registers;
@@ -55,6 +59,10 @@ uint32_t uart_rx_line(struct uart * module, char * str);
 int uart_puts(struct uart * module, const char *s);
 int uart_printf(struct uart * module, const char *format, ...);
 int uart_putchar(struct uart * module, int s);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* UART_H */
 

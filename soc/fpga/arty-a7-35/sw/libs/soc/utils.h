@@ -4,6 +4,10 @@
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * Sleeps for microseconds.
  * @param usec	Sleep time in microseconds.
@@ -44,6 +48,10 @@ uint64_t mtime_get64();
  * @return				Microseconds.
  */
 uint64_t cc2us(uint64_t clock_cycle);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* UTILS_H */
 

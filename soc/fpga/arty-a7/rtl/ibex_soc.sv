@@ -5,7 +5,6 @@ module ibex_soc(
    
   inout  wire [7:0] gpio0,
   inout  wire [3:0] gpio1,
-  
   input  wire       ck_rst_n,
   
   input  wire       uart_rx,
@@ -84,7 +83,7 @@ module ibex_soc(
   
   wb_if wbm[NrMaster](.rst(ndmreset | (~rst_n)), .*);
   wb_if wbs[NrSlave](.rst(ndmreset | (~rst_n)), .*);
-  
+
   // define the macro if you want to use debugger
 `ifdef DEBUG_MODULE_ACTIVE
   logic          dmactive;
@@ -159,7 +158,7 @@ module ibex_soc(
    assign clk = clk100mhz;
    assign rst_n = ck_rst_n;
 `endif
-   
+
   wb_ibex_core #(
     .RV32M(ibex_pkg::RV32MFast),
     .RV32B(ibex_pkg::RV32BBalanced),

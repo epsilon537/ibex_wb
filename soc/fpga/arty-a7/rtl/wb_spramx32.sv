@@ -29,8 +29,8 @@ module wb_spramx32
       .d    (ram_d),
       .q    (ram_q));
 `else
-/*On the Arty, use XPM memory instances. This allows post-implementation updates of the 
- *memory contents in the bitstream.*/
+/*On the Arty, use XPM memory instances. When Vivado synthesizes an XPM memory instance, it produces a .mmi file for that memory.
+ *This .mmi file can be used for post-implementation updates of the memory contents in the FPGA bitstream.*/
 xpm_memory_spram #(
    .ADDR_WIDTH_A(addr_width),              // DECIMAL
    .AUTO_SLEEP_TIME(0),           // DECIMAL
@@ -47,8 +47,7 @@ xpm_memory_spram #(
    .USE_MEM_INIT(1),              // DECIMAL
    .WAKEUP_TIME("disable_sleep"), // String
    .WRITE_DATA_WIDTH_A(32),       // DECIMAL
-   .WRITE_MODE_A("read_first"),   // String
-   .RAM_DECOMP("power")           // String
+   .WRITE_MODE_A("read_first")    // String
 )
 xpm_memory_spram_inst (
    .dbiterra(),             // 1-bit output: Status signal to indicate double bit error occurrence

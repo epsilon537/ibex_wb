@@ -32,14 +32,15 @@ module wb_spramx32
 /*On the Arty, use XPM memory instances. When Vivado synthesizes an XPM memory instance, it produces a .mmi file for that memory.
  *This .mmi file can be used for post-implementation updates of the memory contents in the FPGA bitstream.*/
 xpm_memory_spram #(
-   .ADDR_WIDTH_A(addr_width),              // DECIMAL
+   .ADDR_WIDTH_A(addr_width),     // DECIMAL
    .AUTO_SLEEP_TIME(0),           // DECIMAL
-   .BYTE_WRITE_WIDTH_A(8),       // DECIMAL
+   .BYTE_WRITE_WIDTH_A(8),        // DECIMAL
    .ECC_MODE("no_ecc"),           // String
    .MEMORY_INIT_PARAM("0"),       // String
    .MEMORY_OPTIMIZATION("true"),  // String
    .MEMORY_PRIMITIVE("auto"),     // String
    .MEMORY_SIZE(size*8),          // DECIMAL, memory size in bits
+   .RAM_DECOMP("power"),          // String
    .MESSAGE_CONTROL(0),           // DECIMAL
    .READ_DATA_WIDTH_A(32),        // DECIMAL
    .READ_LATENCY_A(1),            // DECIMAL

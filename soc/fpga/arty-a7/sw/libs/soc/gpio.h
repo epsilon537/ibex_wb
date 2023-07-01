@@ -4,6 +4,10 @@
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct gpio
 {
 	volatile uint32_t * registers;
@@ -41,6 +45,10 @@ void gpio_set_pin(struct gpio * module, uint8_t pin);
  * @param pin    Pin number for the pin to turn off.
  */
 void gpio_clear_pin(struct gpio * module, uint8_t pin);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GPIO_H */
 

@@ -82,7 +82,7 @@ module ibex_soc(
   logic ndmreset;
   
   wb_if wbm[NrMaster](.rst(ndmreset | (~rst_n)), .*);
-  wb_if wbs[NrSlave](.rst(~sys_rst_n), .clk(sys_clk));
+  wb_if wbs[NrSlave](.rst(~rst_n), .clk(clk));
 
   // define the macro if you want to use debugger
 `ifdef DEBUG_MODULE_ACTIVE

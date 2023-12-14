@@ -46,24 +46,24 @@ module wb_timer(
         else begin
             if (valid)
                 if (wb.we)
-                    case (wb.adr[2:0])
+                    case (wb.adr[0])
 `ifdef NO_MODPORT_EXPRESSIONS
-                        3'h0 : control_reg <= wb.dat_m;
-                        3'h4 : counter_reg <= wb.dat_m;		      
+                        1'h0 : control_reg <= wb.dat_m;
+                        1'h1 : counter_reg <= wb.dat_m;		      
 `else		      
-                        3'h0 : control_reg <= wb.dat_i;
-                        3'h4 : counter_reg <= wb.dat_i;
+                        1'h0 : control_reg <= wb.dat_i;
+                        1'h1 : counter_reg <= wb.dat_i;
 `endif		      
                         default : ;
                     endcase
                 else
-                    case (wb.adr[2:0])
+                    case (wb.adr[0])
 `ifdef NO_MODPORT_EXPRESSIONS		      
-                        3'h0 : wb.dat_s <= control_reg;
-                        3'h4 : wb.dat_s <= counter_reg;
+                        1'h0 : wb.dat_s <= control_reg;
+                        1'h1 : wb.dat_s <= counter_reg;
 `else
-                        3'h0 : wb.dat_o <= control_reg;
-                        3'h4 : wb.dat_o <= counter_reg;		      
+                        1'h0 : wb.dat_o <= control_reg;
+                        1'h1 : wb.dat_o <= counter_reg;		      
 `endif		      
                         default : ;
                     endcase

@@ -11,7 +11,8 @@ module slave2wb
    assign valid       = wb.cyc & wb.stb;
    assign slave.req   = valid;
    assign slave.we    = wb.we;
-   assign slave.addr  = wb.adr;
+   assign slave.addr  = {2'b00, wb.adr, 2'b00};
+   
    assign slave.be    = wb.sel;
 `ifdef NO_MODPORT_EXPRESSIONS   
    assign slave.wdata = wb.dat_m;

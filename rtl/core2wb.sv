@@ -2,14 +2,14 @@
 
 `default_nettype none
 
-module core2wb
-  (core_if.slave core,
+module core2wb (
+   core_if.slave core,
    wb_if.master  wb);
 
    logic [31:0] wdata;
    logic [3:0]  sel;
    logic        we;
-   logic [31:0] adr;
+   logic [27:0] adr;
    logic transaction_ongoing;
    logic stb;
 
@@ -59,7 +59,7 @@ module core2wb
              transaction_ongoing <= 1'b1;
              stb <= 1'b1;
              wdata <= core.wdata;
-             adr <= core.addr;
+             adr <= core.addr[29:2];
              sel <= core.we ? core.be : '1;
              we <= core.we;
           end

@@ -38,18 +38,7 @@ module wb_wbuart_wrap #(
     output wire o_uart_rxfifo_int,
     output wire o_uart_txfifo_int
   );
-  
-  logic [1:0] addr;
-  
-  always_comb
-    case (wb.adr[3:0])
-      4'h0: addr = 2'b00;
-      4'h4: addr = 2'b01;
-      4'h8: addr = 2'b10;
-      4'hc: addr = 2'b11;
-      default: addr = 2'b01;
-    endcase
-  
+
   wbuart #(
     .INITIAL_SETUP                  (INITIAL_SETUP),
     .LGFLEN                         (LGFLEN),
@@ -60,7 +49,7 @@ module wb_wbuart_wrap #(
     .i_wb_cyc           (wb.cyc),
     .i_wb_stb           (wb.stb & wb.cyc),
     .i_wb_we            (wb.we),
-    .i_wb_addr          (addr),
+    .i_wb_addr          (wb.adr[1:0]),
 `ifdef NO_MODPORT_EXPRESSIONS
     .i_wb_data          (wb.dat_m),	    
 `else	    

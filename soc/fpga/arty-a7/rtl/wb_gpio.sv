@@ -27,7 +27,7 @@ module wb_gpio #(
     wb_if.slave           wb
   );
 
-  logic unused = &{1'b0, wb.adr[31:4], wb.sel, 1'b0};
+  logic unused = &{1'b0, wb.adr[27:2], wb.sel, 1'b0};
    
   logic [size-1:0] input_reg;
   logic [size-1:0] output_reg    = 'b0;
@@ -43,7 +43,7 @@ module wb_gpio #(
   
   assign wb.stall = 1'b0;
   assign wb.err = 1'b0;
-  
+
   always_ff @(posedge wb.clk)
     if (wb.rst) begin
        direction_reg <= '0;
@@ -59,26 +59,26 @@ module wb_gpio #(
       if (valid) begin
 	 wb.ack <= ~wb.stall;
 	 if (wb.we)
-           case (wb.adr[3:0])
+           case (wb.adr[1:0])
 `ifdef NO_MODPORT_EXPRESSIONS
-             4'h4 : output_reg    <= wb.dat_m[size-1:0];
-             4'h8 : direction_reg <= wb.dat_m[size-1:0];
+             2'h1 : output_reg    <= wb.dat_m[size-1:0];
+             2'h2 : direction_reg <= wb.dat_m[size-1:0];
 `else	  
-             4'h4 : output_reg    <= wb.dat_i[size-1:0];
-             4'h8 : direction_reg <= wb.dat_i[size-1:0];
+             2'h1 : output_reg    <= wb.dat_i[size-1:0];
+             2'h2 : direction_reg <= wb.dat_i[size-1:0];
 `endif	  
              default         : ;
            endcase
 	 else
-           case (wb.adr[3:0])
+           case (wb.adr[1:0])
 `ifdef NO_MODPORT_EXPRESSIONS	  
-             4'h0 : wb.dat_s <= 32'(input_reg);
-             4'h4 : wb.dat_s <= 32'(output_reg);
-             4'h8 : wb.dat_s <= 32'(direction_reg);
+             2'h0 : wb.dat_s <= 32'(input_reg);
+             2'h1 : wb.dat_s <= 32'(output_reg);
+             2'h2 : wb.dat_s <= 32'(direction_reg);
 `else
-             4'h0 : wb.dat_o <= 32'(input_reg);
-             4'h4 : wb.dat_o <= 32'(output_reg);
-             4'h8 : wb.dat_o <= 32'(direction_reg);	  
+             2'h0 : wb.dat_o <= 32'(input_reg);
+             2'h1 : wb.dat_o <= 32'(output_reg);
+             2'h2 : wb.dat_o <= 32'(direction_reg);	  
 `endif
              default         : ;	  
            endcase

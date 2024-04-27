@@ -6,7 +6,7 @@
 // ***   All Rights Reserved. Licensed Library.                 ***
 // ***                                                          ***
 // ****************************************************************
-// 1RW-RAM [Redundancy # External FUSE][LargeScale][Sleep]<Standard> 
+// 1RW-RAM [Redundancy # External FUSE][LargeScale][Sleep]<Standard>
 // Verilog HDL Gate Simulation Model.
 //                                              LIB-cs251.common.bpf-0010
 //                                              LIB-cs251.rpsqlpa.bpf-0001
@@ -19,8 +19,8 @@
 `timescale 1ps/1ps
 `celldefine
 `ifdef verifault
-	`suppress_faults
-	`enable_portfaults
+  `suppress_faults
+  `enable_portfaults
 `endif
 //`delay_mode_path
 
@@ -144,12 +144,12 @@ buf
  (Buf_IA[2], IA[2]),
  (Buf_IA[1], IA[1]),
  (Buf_IA[0], IA[0]),
- (Buf_FO[5], FO[5]), 
- (Buf_FO[4], FO[4]), 
- (Buf_FO[3], FO[3]), 
- (Buf_FO[2], FO[2]), 
- (Buf_FO[1], FO[1]), 
- (Buf_FO[0], FO[0]), 
+ (Buf_FO[5], FO[5]),
+ (Buf_FO[4], FO[4]),
+ (Buf_FO[3], FO[3]),
+ (Buf_FO[2], FO[2]),
+ (Buf_FO[1], FO[1]),
+ (Buf_FO[0], FO[0]),
  (Buf_SLP, SLP),
  (Buf_WE, WE);
 buf
@@ -919,16 +919,16 @@ reg
 wire Flag_FO;
 
 initial begin
-	`ifdef mem_load
-	$display ("\t======================================");
-	$display ("\t=    Don't use this option           =");
-	$display ("\t=          ( +define+mem_load )      =");
-	$display ("\t=    in Final Simulation.            =");
-	$display ("\t======================================\n");
-	$readmemh ("RAM16384X32.pat_ve", Mem, 0, `WORD_RAM16384X32 - 1);
-	`endif
-	Flag_Mem_X = 1;
-	Flag_Msg_FO = 0;
+  `ifdef mem_load
+  $display ("\t======================================");
+  $display ("\t=    Don't use this option           =");
+  $display ("\t=          ( +define+mem_load )      =");
+  $display ("\t=    in Final Simulation.            =");
+  $display ("\t======================================\n");
+  $readmemh ("RAM16384X32.pat_ve", Mem, 0, `WORD_RAM16384X32 - 1);
+  `endif
+  Flag_Mem_X = 1;
+  Flag_Msg_FO = 0;
 end
 
 initial begin
@@ -957,232 +957,232 @@ always @(notify_SLP) begin
 end
 
 always @(notify_CKWL) begin
-#0	if (!(Buf_CE === 1 && Pre_CE[1] === 1)) begin
-		Reg_A = `BIT_RAM16384X32'bx;
-		if (Flag_Mem_X == 1) begin
-			Mem_X;
-		end
-	end
+#0  if (!(Buf_CE === 1 && Pre_CE[1] === 1)) begin
+    Reg_A = `BIT_RAM16384X32'bx;
+    if (Flag_Mem_X == 1) begin
+      Mem_X;
+    end
+  end
 end
 
 always @(notify_CKWH) begin
-#0	Reg_A = `BIT_RAM16384X32'bx;
-	if (Flag_Mem_X == 1) begin
-		Mem_X;
-	end
+#0  Reg_A = `BIT_RAM16384X32'bx;
+  if (Flag_Mem_X == 1) begin
+    Mem_X;
+  end
 end
 
 always @(notify_FO_CK_FO) begin
-#0	Reg_A = `BIT_RAM16384X32'bx;
-	if (Flag_Mem_X == 1) begin
-		Mem_X;
-	end
+#0  Reg_A = `BIT_RAM16384X32'bx;
+  if (Flag_Mem_X == 1) begin
+    Mem_X;
+  end
 end
 
 always @(notify_WE_CK_WE) begin
-#0	Reg_A = `BIT_RAM16384X32'bx;
-	Mem[Pre_IA] = `BIT_RAM16384X32'bx;
+#0  Reg_A = `BIT_RAM16384X32'bx;
+  Mem[Pre_IA] = `BIT_RAM16384X32'bx;
 end
 
 always @(notify_IA_CK_IA) begin
-#0	if (Pre_WE !== 0) begin
-		Reg_A = `BIT_RAM16384X32'bx;
-	end
-	if (Flag_Mem_X == 1) begin
-		Mem_X;
-	end
+#0  if (Pre_WE !== 0) begin
+    Reg_A = `BIT_RAM16384X32'bx;
+  end
+  if (Flag_Mem_X == 1) begin
+    Mem_X;
+  end
 end
 
 always @(notify_I31_CK_I31) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[31] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[31] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I30_CK_I30) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[30] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[30] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I29_CK_I29) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[29] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[29] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I28_CK_I28) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[28] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[28] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I27_CK_I27) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[27] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[27] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I26_CK_I26) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[26] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[26] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I25_CK_I25) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[25] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[25] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I24_CK_I24) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[24] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[24] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I23_CK_I23) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[23] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[23] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I22_CK_I22) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[22] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[22] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I21_CK_I21) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[21] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[21] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I20_CK_I20) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[20] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[20] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I19_CK_I19) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[19] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[19] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I18_CK_I18) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[18] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[18] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I17_CK_I17) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[17] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[17] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I16_CK_I16) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[16] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[16] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I15_CK_I15) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[15] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[15] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I14_CK_I14) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[14] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[14] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I13_CK_I13) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[13] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[13] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I12_CK_I12) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[12] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[12] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I11_CK_I11) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[11] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[11] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I10_CK_I10) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[10] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[10] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I9_CK_I9) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[9] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[9] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I8_CK_I8) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[8] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[8] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I7_CK_I7) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[7] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[7] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I6_CK_I6) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[6] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[6] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I5_CK_I5) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[5] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[5] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I4_CK_I4) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[4] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[4] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I3_CK_I3) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[3] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[3] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I2_CK_I2) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[2] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[2] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I1_CK_I1) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[1] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[1] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 always @(notify_I0_CK_I0) begin
-#0	Reg_Mem = Mem[Pre_IA];
-	Reg_Mem[0] = 1'bx;
-	Mem[Pre_IA] = Reg_Mem;
+#0  Reg_Mem = Mem[Pre_IA];
+  Reg_Mem[0] = 1'bx;
+  Mem[Pre_IA] = Reg_Mem;
 end
 
 `endif
@@ -1190,231 +1190,231 @@ end
 assign
 `ifdef FAST_FUNC
 `ifdef same_time_check
-	FOe0 = ~Flag_FO,
+  FOe0 = ~Flag_FO,
 `endif
 `else
-	N_CEe0 = ~N_CE,
-	FOe0 = ~Flag_FO,
+  N_CEe0 = ~N_CE,
+  FOe0 = ~Flag_FO,
 `endif
-	Flag_FO = |Buf_FO ,
-	Buf_A = Reg_A;
+  Flag_FO = |Buf_FO ,
+  Buf_A = Reg_A;
 
 ////////  FO Operation ////////////////////////////////////////////////////////////////
 always @(Flag_FO) begin
-#0	if (Flag_FO == 0 && Flag_Msg_FO == 0) begin
-	`ifdef no_macro_msg
-	`else
-		$display("\tFuse Signal Fixed!\n\tin %m\n\t(FO: %0t);\n", $time);
-	`endif
-		Flag_Msg_FO = 1;
-	end
+#0  if (Flag_FO == 0 && Flag_Msg_FO == 0) begin
+  `ifdef no_macro_msg
+  `else
+    $display("\tFuse Signal Fixed!\n\tin %m\n\t(FO: %0t);\n", $time);
+  `endif
+    Flag_Msg_FO = 1;
+  end
 end
 
 ////////  SLP Operation ////////////////////////////////////////////////////////////////
 always @(Buf_SLP) begin
-	if (Buf_SLP == 0) begin
-		if (!(Buf_CK === 1'b0 || (N_CE === 1'b1 && Buf_CE === 1'b1 ))) begin
-	       	`ifdef no_macro_msg
-	       	`else
-	       		$display("\tError! SLEEP Mode Entry Violation\n\tin %m\n\t(SLP: %0t);\n", $time);
-	       	`endif
-	               	Reg_A =  `BIT_RAM16384X32'bx;
-               		if (Flag_Mem_X == 1) begin
-                		Mem_X;
-	       		end
-		end
-	end
+  if (Buf_SLP == 0) begin
+    if (!(Buf_CK === 1'b0 || (N_CE === 1'b1 && Buf_CE === 1'b1 ))) begin
+           `ifdef no_macro_msg
+           `else
+             $display("\tError! SLEEP Mode Entry Violation\n\tin %m\n\t(SLP: %0t);\n", $time);
+           `endif
+                   Reg_A =  `BIT_RAM16384X32'bx;
+                   if (Flag_Mem_X == 1) begin
+                    Mem_X;
+             end
+    end
+  end
         else if (Buf_SLP === 1'bx) begin
-	`ifdef no_macro_msg
-	`else
-		$display("\tError! Invalid SLP Signal Detected\n\tin %m\n\t(SLP: %0t);\n", $time);
-       	`endif
+  `ifdef no_macro_msg
+  `else
+    $display("\tError! Invalid SLP Signal Detected\n\tin %m\n\t(SLP: %0t);\n", $time);
+         `endif
                 Reg_A =  `BIT_RAM16384X32'bx;
-       	        if (Flag_Mem_X == 1) begin
-			Mem_X;
-		end
+                 if (Flag_Mem_X == 1) begin
+      Mem_X;
+    end
         end
 end
 
 ////////  CE Operation ////////////////////////////////////////////////////////////////
 always @(Buf_CE) begin
-	if (Buf_CK == 0) begin
-		N_CE = Buf_CE;
-	end
-	if (Buf_CK === 1'bx && Buf_CE !== 1) begin
-		if (Buf_SLP == 0) begin
-		`ifdef no_macro_msg
-		`else
-			$display("\tError! Invalid CK Active on SLEEP Mode\n\tin %m\n\t(CK: %0t);\n", $time);
-		`endif
-		end
-	`ifdef no_macro_msg
-	`else
-		$display("\tError! Invalid Clock Signal Detected\n\tin %m\n\t(CK: %0t);\n", $time);
-	`endif
-		Reg_A = `BIT_RAM16384X32'bx;
-		if (Flag_Mem_X == 1) begin
-			Mem_X;
-		end
-	end
+  if (Buf_CK == 0) begin
+    N_CE = Buf_CE;
+  end
+  if (Buf_CK === 1'bx && Buf_CE !== 1) begin
+    if (Buf_SLP == 0) begin
+    `ifdef no_macro_msg
+    `else
+      $display("\tError! Invalid CK Active on SLEEP Mode\n\tin %m\n\t(CK: %0t);\n", $time);
+    `endif
+    end
+  `ifdef no_macro_msg
+  `else
+    $display("\tError! Invalid Clock Signal Detected\n\tin %m\n\t(CK: %0t);\n", $time);
+  `endif
+    Reg_A = `BIT_RAM16384X32'bx;
+    if (Flag_Mem_X == 1) begin
+      Mem_X;
+    end
+  end
 end
 
 ////////  CK Operation ////////////////////////////////////////////////////////////////
 always @(Buf_CK) begin
-#0	if (Buf_CK == 1 && Pre_CK == 0) begin
-		if (Buf_CE == 0) begin
-			if (Flag_FO == 0) begin
-				if (Buf_SLP == 1) begin
-					if (^Buf_IA !== 1'bx) begin
-						if (Buf_WE == 0) begin
-							if (Buf_DM == 0) begin
-								Mem[Buf_IA] = Buf_I;
-								Flag_Mem_X = 1;
-							end
-							else if (&Buf_DM !== 1) begin
-								Reg_Mem = Mem[Buf_IA];
-								for (Reg_Bit = 0; Reg_Bit < `BIT_RAM16384X32; Reg_Bit = Reg_Bit + 1) begin
-									if (Buf_DM[Reg_Bit] == 0) begin
-										Reg_Mem[Reg_Bit] = Buf_I[Reg_Bit];
-									end
-									else if (Buf_DM[Reg_Bit] === 1'bx) begin
-									`ifdef no_macro_msg
-									`else
-										$display("\tError! Invalid Data Write Mask Signal Detected\n\tin %m\n\t(edge[01] CK && DM[%0d]: %0t);\n", Reg_Bit, $time);
-									`endif
-										Reg_Mem[Reg_Bit] = 1'bx;
-									end
-								end
-								Mem[Buf_IA] = Reg_Mem;
-								Flag_Mem_X = 1;
-							end
-						end
-						else if (Buf_WE == 1) begin
-							Reg_A = Mem[Buf_IA];
-						end
-						else begin
-						`ifdef no_macro_msg
-						`else
-							$display("\tError! Invalid Write Enable Signal Detected\n\tin %m\n\t(edge[01] CK && WE: %0t);\n", $time);
-						`endif
-							Mem[Buf_IA] = `BIT_RAM16384X32'bx;
-							Reg_A = `BIT_RAM16384X32'bx;
-						end
-					`ifdef FAST_FUNC
-					`else
-						Pre_WE = Buf_WE;
-					`endif
-					end
-					else begin
-					`ifdef no_macro_msg
-					`else
-						$display("\tError! Invalid Address Signal Detected\n\tin %m\n\t(edge[01] CK && IA: %0t);\n", $time);
-					`endif
-						if (Buf_WE !== 0) begin
-							Reg_A = `BIT_RAM16384X32'bx;
-						end
-						if (Flag_Mem_X == 1) begin
-							Mem_X;
-						end
-					end
-				`ifdef FAST_FUNC
-				`else
-					Pre_IA = Buf_IA;
-				`endif
-				end
-				else if (Buf_SLP == 0) begin
-				`ifdef no_macro_msg
-				`else
-					$display("\tError! Invalid CK Active on SLEEP Mode\n\tin %m\n\t(edge[01] CK && SLP: %0t);\n", $time);
-				`endif
-					Reg_A = `BIT_RAM16384X32'bx;
-					if (Flag_Mem_X == 1) begin
-						Mem_X;
-					end        
-				end
-			end
-			else begin
-				if (Flag_Msg_FO == 1) begin
-				`ifdef no_macro_msg
-				`else
-					$display("\tError! Invalid Fuse Signal Detected\n\tin %m\n\t(FO: %0t);\n", $time);
-				`endif
-					Reg_A = `BIT_RAM16384X32'bx;
-					if (Flag_Mem_X == 1) begin
-						Mem_X;
-					end
-					Flag_Msg_FO = 0;
-				end
-			end
-		end
-		else if (Buf_CE === 1'bx) begin
-			if (Buf_SLP == 0) begin
-			`ifdef no_macro_msg
-			`else
-				$display("\tError! Invalid CK Active on SLEEP Mode\n\tin %m\n\t(edge[01] CK && SLP: %0t);\n", $time);
-			`endif
-			end
-		`ifdef no_macro_msg
-		`else
-			$display("\tError! Invalid Chip Enable Signal Detected\n\tin %m\n\t(edge[01] CK && CE: %0t);\n", $time);
-		`endif
-			Reg_A = `BIT_RAM16384X32'bx;
-			if (Flag_Mem_X == 1) begin
-				Mem_X;
-			end
-		`ifdef FAST_FUNC
-		`else
-			Pre_IA = `ADDRESS_RAM16384X32'bx;
-		`endif
-		end
-		Pre_CE = {Pre_CE[0], Buf_CE};
-	end
-	else if (Buf_CK == 1 && Pre_CK === 1'bx) begin
-		Pre_CE = {Pre_CE[0], Buf_CE};
-	end
-	else if (Buf_CK == 0) begin
-		N_CE = Buf_CE;
-	end
-	else if (Buf_CK === 1'bx) begin
-		if (!(Buf_CE === 1 && (Pre_CE[0] === 1 || Pre_CK === 0))) begin
-			if (Buf_SLP == 0) begin
-			`ifdef no_macro_msg
-			`else
-				$display("\tError! Invalid CK Active on SLEEP Mode\n\tin %m\n\t(edge[01] CK && SLP: %0t);\n", $time);
-			`endif
-			end
-		`ifdef no_macro_msg
-		`else
-			$display("\tError! Invalid Clock Signal Detected\n\tin %m\n\t(CK: %0t);\n", $time);
-		`endif
-			Reg_A = `BIT_RAM16384X32'bx;
-			if (Flag_Mem_X == 1) begin
-				Mem_X;
-			end
-		`ifdef FAST_FUNC
-		`else
-			Pre_IA = `ADDRESS_RAM16384X32'bx;
-		`endif
-		end
-		if (Pre_CK == 0) begin
-			Pre_CE = {Pre_CE[0], Buf_CE};
-		end
-	end
-	Pre_CK = Buf_CK;
+#0  if (Buf_CK == 1 && Pre_CK == 0) begin
+    if (Buf_CE == 0) begin
+      if (Flag_FO == 0) begin
+        if (Buf_SLP == 1) begin
+          if (^Buf_IA !== 1'bx) begin
+            if (Buf_WE == 0) begin
+              if (Buf_DM == 0) begin
+                Mem[Buf_IA] = Buf_I;
+                Flag_Mem_X = 1;
+              end
+              else if (&Buf_DM !== 1) begin
+                Reg_Mem = Mem[Buf_IA];
+                for (Reg_Bit = 0; Reg_Bit < `BIT_RAM16384X32; Reg_Bit = Reg_Bit + 1) begin
+                  if (Buf_DM[Reg_Bit] == 0) begin
+                    Reg_Mem[Reg_Bit] = Buf_I[Reg_Bit];
+                  end
+                  else if (Buf_DM[Reg_Bit] === 1'bx) begin
+                  `ifdef no_macro_msg
+                  `else
+                    $display("\tError! Invalid Data Write Mask Signal Detected\n\tin %m\n\t(edge[01] CK && DM[%0d]: %0t);\n", Reg_Bit, $time);
+                  `endif
+                    Reg_Mem[Reg_Bit] = 1'bx;
+                  end
+                end
+                Mem[Buf_IA] = Reg_Mem;
+                Flag_Mem_X = 1;
+              end
+            end
+            else if (Buf_WE == 1) begin
+              Reg_A = Mem[Buf_IA];
+            end
+            else begin
+            `ifdef no_macro_msg
+            `else
+              $display("\tError! Invalid Write Enable Signal Detected\n\tin %m\n\t(edge[01] CK && WE: %0t);\n", $time);
+            `endif
+              Mem[Buf_IA] = `BIT_RAM16384X32'bx;
+              Reg_A = `BIT_RAM16384X32'bx;
+            end
+          `ifdef FAST_FUNC
+          `else
+            Pre_WE = Buf_WE;
+          `endif
+          end
+          else begin
+          `ifdef no_macro_msg
+          `else
+            $display("\tError! Invalid Address Signal Detected\n\tin %m\n\t(edge[01] CK && IA: %0t);\n", $time);
+          `endif
+            if (Buf_WE !== 0) begin
+              Reg_A = `BIT_RAM16384X32'bx;
+            end
+            if (Flag_Mem_X == 1) begin
+              Mem_X;
+            end
+          end
+        `ifdef FAST_FUNC
+        `else
+          Pre_IA = Buf_IA;
+        `endif
+        end
+        else if (Buf_SLP == 0) begin
+        `ifdef no_macro_msg
+        `else
+          $display("\tError! Invalid CK Active on SLEEP Mode\n\tin %m\n\t(edge[01] CK && SLP: %0t);\n", $time);
+        `endif
+          Reg_A = `BIT_RAM16384X32'bx;
+          if (Flag_Mem_X == 1) begin
+            Mem_X;
+          end
+        end
+      end
+      else begin
+        if (Flag_Msg_FO == 1) begin
+        `ifdef no_macro_msg
+        `else
+          $display("\tError! Invalid Fuse Signal Detected\n\tin %m\n\t(FO: %0t);\n", $time);
+        `endif
+          Reg_A = `BIT_RAM16384X32'bx;
+          if (Flag_Mem_X == 1) begin
+            Mem_X;
+          end
+          Flag_Msg_FO = 0;
+        end
+      end
+    end
+    else if (Buf_CE === 1'bx) begin
+      if (Buf_SLP == 0) begin
+      `ifdef no_macro_msg
+      `else
+        $display("\tError! Invalid CK Active on SLEEP Mode\n\tin %m\n\t(edge[01] CK && SLP: %0t);\n", $time);
+      `endif
+      end
+    `ifdef no_macro_msg
+    `else
+      $display("\tError! Invalid Chip Enable Signal Detected\n\tin %m\n\t(edge[01] CK && CE: %0t);\n", $time);
+    `endif
+      Reg_A = `BIT_RAM16384X32'bx;
+      if (Flag_Mem_X == 1) begin
+        Mem_X;
+      end
+    `ifdef FAST_FUNC
+    `else
+      Pre_IA = `ADDRESS_RAM16384X32'bx;
+    `endif
+    end
+    Pre_CE = {Pre_CE[0], Buf_CE};
+  end
+  else if (Buf_CK == 1 && Pre_CK === 1'bx) begin
+    Pre_CE = {Pre_CE[0], Buf_CE};
+  end
+  else if (Buf_CK == 0) begin
+    N_CE = Buf_CE;
+  end
+  else if (Buf_CK === 1'bx) begin
+    if (!(Buf_CE === 1 && (Pre_CE[0] === 1 || Pre_CK === 0))) begin
+      if (Buf_SLP == 0) begin
+      `ifdef no_macro_msg
+      `else
+        $display("\tError! Invalid CK Active on SLEEP Mode\n\tin %m\n\t(edge[01] CK && SLP: %0t);\n", $time);
+      `endif
+      end
+    `ifdef no_macro_msg
+    `else
+      $display("\tError! Invalid Clock Signal Detected\n\tin %m\n\t(CK: %0t);\n", $time);
+    `endif
+      Reg_A = `BIT_RAM16384X32'bx;
+      if (Flag_Mem_X == 1) begin
+        Mem_X;
+      end
+    `ifdef FAST_FUNC
+    `else
+      Pre_IA = `ADDRESS_RAM16384X32'bx;
+    `endif
+    end
+    if (Pre_CK == 0) begin
+      Pre_CE = {Pre_CE[0], Buf_CE};
+    end
+  end
+  Pre_CK = Buf_CK;
 end
 
 task Mem_X;
 begin
-	for (Address = 0; Address < `WORD_RAM16384X32; Address = Address + 1) begin
-		Mem[Address] = `BIT_RAM16384X32'bx;
-	end
-	Flag_Mem_X = 0;
+  for (Address = 0; Address < `WORD_RAM16384X32; Address = Address + 1) begin
+    Mem[Address] = `BIT_RAM16384X32'bx;
+  end
+  Flag_Mem_X = 0;
 end
 endtask
 
 endmodule
 `ifdef verifault
-	`nosuppress_faults
-	`disable_portfaults
+  `nosuppress_faults
+  `disable_portfaults
 `endif
 `endcelldefine

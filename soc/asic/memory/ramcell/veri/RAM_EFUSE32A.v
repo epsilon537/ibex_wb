@@ -21,8 +21,8 @@
 `timescale 1ps/1ps
 `celldefine
 `ifdef verifault
-	`suppress_faults
-	`enable_portfaults
+  `suppress_faults
+  `enable_portfaults
 `endif
 //`delay_mode_path
 
@@ -482,111 +482,111 @@ endspecify
 
 // simulation initail
 initial begin
-	Flag_Blow_Set = 1'b1;
-	Reg_EFC       = 32'b0;
+  Flag_Blow_Set = 1'b1;
+  Reg_EFC       = 32'b0;
 end
 
 
 `ifdef FAST_FUNC
 `else
 always @(notify_SENSE) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_Read_CLK_SENSE) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_Read_CLK_EN) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_Read_CLK_SM) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_Read_CLK_SEL) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_Read_CLK_SI) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_Read) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_Set_CLK_WE) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_Set_CLK_SENSE) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_Set_CLK_EN) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_Set_CLK_SM) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_Set_CLK_SEL) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_Set_CLK_SI) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_Set) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_BLOW_VBLOW_SENSE) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_BLOW_WE_VBLOW) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_BLOW_WE_CLK) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_BLOW_WE_EN) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_BLOW_WE_SI) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_Update_CLK_SENSE) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_Update_CLK_EN) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_Update_CLK_SM) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_Update_CLK_SEL) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_Update_CLK_SI) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 always @(notify_Update) begin
-#1	TaskX;
+#1  TaskX;
 end
 
 
@@ -595,80 +595,80 @@ end
 
 // initailize mode
 always @(Buf_SENSE) begin
-	if (Buf_SENSE == 1 && Pre_SENSE == 0) begin
-		if (Buf_VBLOW == 0 ) begin
-			if (Buf_EN == 1) begin
-				if (Buf_CLK !== 1'bx) begin
-					Reg_RFF   = Reg_EFC;
-					Reg_FO    = 32'b0 ;
-					if (Buf_SEL == 0)                     Reg_SO = Reg_RFF[31];
-					else if (Buf_SEL == 1 && Buf_SM == 0) Reg_SO = Reg_WFF[31];
-					else if (Buf_SEL == 1 && Buf_SM == 1) Reg_SO = |Reg_WFF | Buf_SI;
-					`ifdef no_macro_msg
-					`else
-					`ifdef LML_MSG
-					   $display("\tMessage! Initialize-2 mode \n\tin %m\n\t(edge[01] SENSE : %0t);\n", $time);
-					`endif
-					`endif
-				end
-				else begin  // CLK = X
-					TaskX;
-					`ifdef no_macro_msg
-					`else
-					   $display("\tError! Invalid CLK Signal Detected at Initialize-2 mode \n\tin %m\n\t(edge[01] SENSE : %0t);\n", $time);
-					`endif
-				end
-			end
-			else if (Buf_EN == 0) begin
-				Reg_RFF   = Reg_EFC;
-				Reg_FO    = 32'b0 ;
-				if (Buf_SEL == 0)                     Reg_SO = Reg_RFF[31];
-				else if (Buf_SEL == 1 && Buf_SM == 0) Reg_SO = Reg_WFF[31];
-				else if (Buf_SEL == 1 && Buf_SM == 1) Reg_SO = |Reg_WFF | Buf_SI;
-				`ifdef no_macro_msg
-				`else
-				`ifdef LML_MSG
-				   $display("\tMessage! Initialize-1 mode \n\tin %m\n\t(edge[01] SENSE : %0t);\n", $time);
-				`endif
-				`endif
-			end
-			else begin		// EN = X
-				TaskX;
-				`ifdef no_macro_msg
-				`else
-				   $display("\tError! Invalid EN Signal Detected at Initialize-1 mode \n\tin %m\n\t(edge[01] SENSE : %0t);\n", $time);
-				`endif
-			end
-			if (Buf_SEL == 0) Reg_SO = Reg_RFF[31];
-		end
-		else begin	// VBLOW = X or H
-			TaskX;
-			`ifdef no_macro_msg
-			`else
-				if (Buf_VBLOW === 1'bx ) $display("\tError! Invalid VBLOW Signal Detected \n\tin %m\n\t(edge[01] SENSE : %0t);\n", $time);
-				if (Buf_VBLOW === 1'b1 ) $display("\tError! Illegal VBLOW Signal Detected \n\tin %m\n\t(edge[01] SENSE : %0t);\n", $time);
-			`endif
-		end
-	end
-	if (Buf_SENSE == 0 && Pre_SENSE == 1) begin
-		if (Buf_VBLOW == 0 ) begin
-			if (Buf_EN == 1) begin
-				if (Buf_CLK !== 1'bx) begin
-					if (Buf_SEL == 0)                     Reg_SO = Reg_RFF[31];
-					else if (Buf_SEL == 1 && Buf_SM == 0) Reg_SO = Reg_WFF[31];
-					else if (Buf_SEL == 1 && Buf_SM == 1) Reg_SO = |Reg_WFF | Buf_SI;
-				end
-			end
-		end
-	end
-	else if (Buf_SENSE === 1'bx) begin
-		TaskX;
-		`ifdef no_macro_msg
-		`else
-		   $display("\tError! Invalid SENSE Signal Detected  \n\tin %m\n\t(SENSE : %0t);\n", $time);
-		`endif
-	end
-	Pre_SENSE = Buf_SENSE;
+  if (Buf_SENSE == 1 && Pre_SENSE == 0) begin
+    if (Buf_VBLOW == 0 ) begin
+      if (Buf_EN == 1) begin
+        if (Buf_CLK !== 1'bx) begin
+          Reg_RFF   = Reg_EFC;
+          Reg_FO    = 32'b0 ;
+          if (Buf_SEL == 0)                     Reg_SO = Reg_RFF[31];
+          else if (Buf_SEL == 1 && Buf_SM == 0) Reg_SO = Reg_WFF[31];
+          else if (Buf_SEL == 1 && Buf_SM == 1) Reg_SO = |Reg_WFF | Buf_SI;
+          `ifdef no_macro_msg
+          `else
+          `ifdef LML_MSG
+             $display("\tMessage! Initialize-2 mode \n\tin %m\n\t(edge[01] SENSE : %0t);\n", $time);
+          `endif
+          `endif
+        end
+        else begin  // CLK = X
+          TaskX;
+          `ifdef no_macro_msg
+          `else
+             $display("\tError! Invalid CLK Signal Detected at Initialize-2 mode \n\tin %m\n\t(edge[01] SENSE : %0t);\n", $time);
+          `endif
+        end
+      end
+      else if (Buf_EN == 0) begin
+        Reg_RFF   = Reg_EFC;
+        Reg_FO    = 32'b0 ;
+        if (Buf_SEL == 0)                     Reg_SO = Reg_RFF[31];
+        else if (Buf_SEL == 1 && Buf_SM == 0) Reg_SO = Reg_WFF[31];
+        else if (Buf_SEL == 1 && Buf_SM == 1) Reg_SO = |Reg_WFF | Buf_SI;
+        `ifdef no_macro_msg
+        `else
+        `ifdef LML_MSG
+           $display("\tMessage! Initialize-1 mode \n\tin %m\n\t(edge[01] SENSE : %0t);\n", $time);
+        `endif
+        `endif
+      end
+      else begin    // EN = X
+        TaskX;
+        `ifdef no_macro_msg
+        `else
+           $display("\tError! Invalid EN Signal Detected at Initialize-1 mode \n\tin %m\n\t(edge[01] SENSE : %0t);\n", $time);
+        `endif
+      end
+      if (Buf_SEL == 0) Reg_SO = Reg_RFF[31];
+    end
+    else begin  // VBLOW = X or H
+      TaskX;
+      `ifdef no_macro_msg
+      `else
+        if (Buf_VBLOW === 1'bx ) $display("\tError! Invalid VBLOW Signal Detected \n\tin %m\n\t(edge[01] SENSE : %0t);\n", $time);
+        if (Buf_VBLOW === 1'b1 ) $display("\tError! Illegal VBLOW Signal Detected \n\tin %m\n\t(edge[01] SENSE : %0t);\n", $time);
+      `endif
+    end
+  end
+  if (Buf_SENSE == 0 && Pre_SENSE == 1) begin
+    if (Buf_VBLOW == 0 ) begin
+      if (Buf_EN == 1) begin
+        if (Buf_CLK !== 1'bx) begin
+          if (Buf_SEL == 0)                     Reg_SO = Reg_RFF[31];
+          else if (Buf_SEL == 1 && Buf_SM == 0) Reg_SO = Reg_WFF[31];
+          else if (Buf_SEL == 1 && Buf_SM == 1) Reg_SO = |Reg_WFF | Buf_SI;
+        end
+      end
+    end
+  end
+  else if (Buf_SENSE === 1'bx) begin
+    TaskX;
+    `ifdef no_macro_msg
+    `else
+       $display("\tError! Invalid SENSE Signal Detected  \n\tin %m\n\t(SENSE : %0t);\n", $time);
+    `endif
+  end
+  Pre_SENSE = Buf_SENSE;
 end
 
 
@@ -676,206 +676,206 @@ end
 // Read mode , Write set mode
 // Write Update mode
 always @(Buf_CLK) begin
-	if (Buf_CLK == 1 && Pre_CLK == 0) begin
-		if (Buf_EN == 1) begin
-			if (Buf_SEL == 0) begin
-				if (Buf_SENSE !== 1'bx) Reg_SO = Reg_RFF[31];
-				if (Buf_SM == 0) begin
-					if (Buf_VBLOW == 0) begin
-						if (Buf_SENSE !== 1'bx) begin
-							if (Buf_SI !== 1'bx) begin				// Read mode
-								Reg_RFF[31] = Reg_RFF[30];
-								Reg_RFF[30] = Reg_RFF[29];
-								Reg_RFF[29] = Reg_RFF[28];
-								Reg_RFF[28] = Reg_RFF[27];
-								Reg_RFF[27] = Reg_RFF[26];
-								Reg_RFF[26] = Reg_RFF[25];
-								Reg_RFF[25] = Reg_RFF[24];
-								Reg_RFF[24] = Reg_RFF[23];
-								Reg_RFF[23] = Reg_RFF[22];
-								Reg_RFF[22] = Reg_RFF[21];
-								Reg_RFF[21] = Reg_RFF[20];
-								Reg_RFF[20] = Reg_RFF[19];
-								Reg_RFF[19] = Reg_RFF[18];
-								Reg_RFF[18] = Reg_RFF[17];
-								Reg_RFF[17] = Reg_RFF[16];
-								Reg_RFF[16] = Reg_RFF[15];
-								Reg_RFF[15] = Reg_RFF[14];
-								Reg_RFF[14] = Reg_RFF[13];
-								Reg_RFF[13] = Reg_RFF[12];
-								Reg_RFF[12] = Reg_RFF[11];
-								Reg_RFF[11] = Reg_RFF[10];
-								Reg_RFF[10] = Reg_RFF[9];
-								Reg_RFF[9] = Reg_RFF[8];
-								Reg_RFF[8] = Reg_RFF[7];
-								Reg_RFF[7] = Reg_RFF[6];
-								Reg_RFF[6] = Reg_RFF[5];
-								Reg_RFF[5] = Reg_RFF[4];
-								Reg_RFF[4] = Reg_RFF[3];
-								Reg_RFF[3] = Reg_RFF[2];
-								Reg_RFF[2] = Reg_RFF[1];
-								Reg_RFF[1] = Reg_RFF[0];
-								Reg_RFF[0]  = Buf_SI;
-								Reg_SO      = Reg_RFF[31];
-								`ifdef no_macro_msg
-								`else
-								`ifdef LML_MSG
-								$display("\tMessage! Read mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
-								`endif
-								`endif
-							end
-						end
-						else begin	// SENSE = X
-							TaskX;
-							`ifdef no_macro_msg
-							`else
-								$display("\tError! Invalid SENSE Signal Detected at Read mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
-							`endif
-						end
-						if (Buf_SI === 1'bx) begin
-							TaskX;
-							`ifdef no_macro_msg
-							`else
-								$display("\tError! Invalid SI Signal Detected at Read mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
-							`endif
-						end
-					end
-				end
-				else if (Buf_SM == 1) begin
-					TaskX;
-					`ifdef no_macro_msg
-					`else
-						$display("\tError! Illegal Function \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
-					`endif
-				end
-				else begin			// SM = X
-					if (Buf_VBLOW == 0) begin
-						TaskX;
-						`ifdef no_macro_msg
-						`else
-							$display("\tError! Invalid SM Signal Detected at Read mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
-						`endif
-					end
-				end
-			end
-			else if (Buf_SEL == 1) begin
-				if (Buf_SM == 0) begin
-					if (Buf_SENSE !== 1'bx) Reg_SO = Reg_WFF[31];
-					if (Buf_SI !== 1'bx) begin
-						if (Buf_WE == 0) begin
-							if (Buf_SENSE !== 1'bx) begin
-								Reg_WFF[31] = Reg_WFF[30];
-								Flag_WFF_SET[31] = Flag_WFF_SET[30];
-								Reg_WFF[30] = Reg_WFF[29];
-								Flag_WFF_SET[30] = Flag_WFF_SET[29];
-								Reg_WFF[29] = Reg_WFF[28];
-								Flag_WFF_SET[29] = Flag_WFF_SET[28];
-								Reg_WFF[28] = Reg_WFF[27];
-								Flag_WFF_SET[28] = Flag_WFF_SET[27];
-								Reg_WFF[27] = Reg_WFF[26];
-								Flag_WFF_SET[27] = Flag_WFF_SET[26];
-								Reg_WFF[26] = Reg_WFF[25];
-								Flag_WFF_SET[26] = Flag_WFF_SET[25];
-								Reg_WFF[25] = Reg_WFF[24];
-								Flag_WFF_SET[25] = Flag_WFF_SET[24];
-								Reg_WFF[24] = Reg_WFF[23];
-								Flag_WFF_SET[24] = Flag_WFF_SET[23];
-								Reg_WFF[23] = Reg_WFF[22];
-								Flag_WFF_SET[23] = Flag_WFF_SET[22];
-								Reg_WFF[22] = Reg_WFF[21];
-								Flag_WFF_SET[22] = Flag_WFF_SET[21];
-								Reg_WFF[21] = Reg_WFF[20];
-								Flag_WFF_SET[21] = Flag_WFF_SET[20];
-								Reg_WFF[20] = Reg_WFF[19];
-								Flag_WFF_SET[20] = Flag_WFF_SET[19];
-								Reg_WFF[19] = Reg_WFF[18];
-								Flag_WFF_SET[19] = Flag_WFF_SET[18];
-								Reg_WFF[18] = Reg_WFF[17];
-								Flag_WFF_SET[18] = Flag_WFF_SET[17];
-								Reg_WFF[17] = Reg_WFF[16];
-								Flag_WFF_SET[17] = Flag_WFF_SET[16];
-								Reg_WFF[16] = Reg_WFF[15];
-								Flag_WFF_SET[16] = Flag_WFF_SET[15];
-								Reg_WFF[15] = Reg_WFF[14];
-								Flag_WFF_SET[15] = Flag_WFF_SET[14];
-								Reg_WFF[14] = Reg_WFF[13];
-								Flag_WFF_SET[14] = Flag_WFF_SET[13];
-								Reg_WFF[13] = Reg_WFF[12];
-								Flag_WFF_SET[13] = Flag_WFF_SET[12];
-								Reg_WFF[12] = Reg_WFF[11];
-								Flag_WFF_SET[12] = Flag_WFF_SET[11];
-								Reg_WFF[11] = Reg_WFF[10];
-								Flag_WFF_SET[11] = Flag_WFF_SET[10];
-								Reg_WFF[10] = Reg_WFF[9];
-								Flag_WFF_SET[10] = Flag_WFF_SET[9];
-								Reg_WFF[9] = Reg_WFF[8];
-								Flag_WFF_SET[9] = Flag_WFF_SET[8];
-								Reg_WFF[8] = Reg_WFF[7];
-								Flag_WFF_SET[8] = Flag_WFF_SET[7];
-								Reg_WFF[7] = Reg_WFF[6];
-								Flag_WFF_SET[7] = Flag_WFF_SET[6];
-								Reg_WFF[6] = Reg_WFF[5];
-								Flag_WFF_SET[6] = Flag_WFF_SET[5];
-								Reg_WFF[5] = Reg_WFF[4];
-								Flag_WFF_SET[5] = Flag_WFF_SET[4];
-								Reg_WFF[4] = Reg_WFF[3];
-								Flag_WFF_SET[4] = Flag_WFF_SET[3];
-								Reg_WFF[3] = Reg_WFF[2];
-								Flag_WFF_SET[3] = Flag_WFF_SET[2];
-								Reg_WFF[2] = Reg_WFF[1];
-								Flag_WFF_SET[2] = Flag_WFF_SET[1];
-								Reg_WFF[1] = Reg_WFF[0];
-								Flag_WFF_SET[1] = Flag_WFF_SET[0];
-								Reg_WFF[0]  = Buf_SI;
-								Flag_WFF_SET[0]  = Buf_SI;
-								Reg_SO      = Reg_WFF[31];
-								`ifdef no_macro_msg
-								`else
-								`ifdef LML_MSG
-									$display("\tMessage! Write Set mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
-								`endif
-								`endif
-							end
-						end
-					end
-					else begin	// SI = X
-						if (Buf_WE == 0) begin
-							TaskX;
-							`ifdef no_macro_msg
-							`else
-							`ifdef debug_message_LML
-								$display("\tError! Invalid SI Signal Detected at Write set mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
-							`else
-							`endif
-							`endif
-						end
-					end
-					if (Buf_WE === 1'bx) begin				// WE = X
-						TaskX;
-						`ifdef no_macro_msg
-						`else
-							$display("\tError! Invalid WE Signal Detected at Write set mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
-						`endif
-					end
-					else if (Buf_WE == 0 && Buf_SENSE === 1'bx) begin	// SENSE = X
-						TaskX;
-						`ifdef no_macro_msg
-						`else
-							$display("\tError! Invalid SENSE Signal Detected at Write set mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
-						`endif
-					end
-				end
-				else if (Buf_SM == 1) begin
-					if (Buf_WE == 0) begin
-						if (Buf_SENSE !== 1'bx) begin
-							if (Buf_SI !== 1'bx) begin
-								`ifdef no_macro_msg
-								`else
-								`ifdef LML_MSG
-									$display("\tMessage! Write Update mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
-								`endif
-								`endif
-								Flag_Blow_Shift = 1'b0 ;
+  if (Buf_CLK == 1 && Pre_CLK == 0) begin
+    if (Buf_EN == 1) begin
+      if (Buf_SEL == 0) begin
+        if (Buf_SENSE !== 1'bx) Reg_SO = Reg_RFF[31];
+        if (Buf_SM == 0) begin
+          if (Buf_VBLOW == 0) begin
+            if (Buf_SENSE !== 1'bx) begin
+              if (Buf_SI !== 1'bx) begin        // Read mode
+                Reg_RFF[31] = Reg_RFF[30];
+                Reg_RFF[30] = Reg_RFF[29];
+                Reg_RFF[29] = Reg_RFF[28];
+                Reg_RFF[28] = Reg_RFF[27];
+                Reg_RFF[27] = Reg_RFF[26];
+                Reg_RFF[26] = Reg_RFF[25];
+                Reg_RFF[25] = Reg_RFF[24];
+                Reg_RFF[24] = Reg_RFF[23];
+                Reg_RFF[23] = Reg_RFF[22];
+                Reg_RFF[22] = Reg_RFF[21];
+                Reg_RFF[21] = Reg_RFF[20];
+                Reg_RFF[20] = Reg_RFF[19];
+                Reg_RFF[19] = Reg_RFF[18];
+                Reg_RFF[18] = Reg_RFF[17];
+                Reg_RFF[17] = Reg_RFF[16];
+                Reg_RFF[16] = Reg_RFF[15];
+                Reg_RFF[15] = Reg_RFF[14];
+                Reg_RFF[14] = Reg_RFF[13];
+                Reg_RFF[13] = Reg_RFF[12];
+                Reg_RFF[12] = Reg_RFF[11];
+                Reg_RFF[11] = Reg_RFF[10];
+                Reg_RFF[10] = Reg_RFF[9];
+                Reg_RFF[9] = Reg_RFF[8];
+                Reg_RFF[8] = Reg_RFF[7];
+                Reg_RFF[7] = Reg_RFF[6];
+                Reg_RFF[6] = Reg_RFF[5];
+                Reg_RFF[5] = Reg_RFF[4];
+                Reg_RFF[4] = Reg_RFF[3];
+                Reg_RFF[3] = Reg_RFF[2];
+                Reg_RFF[2] = Reg_RFF[1];
+                Reg_RFF[1] = Reg_RFF[0];
+                Reg_RFF[0]  = Buf_SI;
+                Reg_SO      = Reg_RFF[31];
+                `ifdef no_macro_msg
+                `else
+                `ifdef LML_MSG
+                $display("\tMessage! Read mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
+                `endif
+                `endif
+              end
+            end
+            else begin  // SENSE = X
+              TaskX;
+              `ifdef no_macro_msg
+              `else
+                $display("\tError! Invalid SENSE Signal Detected at Read mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
+              `endif
+            end
+            if (Buf_SI === 1'bx) begin
+              TaskX;
+              `ifdef no_macro_msg
+              `else
+                $display("\tError! Invalid SI Signal Detected at Read mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
+              `endif
+            end
+          end
+        end
+        else if (Buf_SM == 1) begin
+          TaskX;
+          `ifdef no_macro_msg
+          `else
+            $display("\tError! Illegal Function \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
+          `endif
+        end
+        else begin      // SM = X
+          if (Buf_VBLOW == 0) begin
+            TaskX;
+            `ifdef no_macro_msg
+            `else
+              $display("\tError! Invalid SM Signal Detected at Read mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
+            `endif
+          end
+        end
+      end
+      else if (Buf_SEL == 1) begin
+        if (Buf_SM == 0) begin
+          if (Buf_SENSE !== 1'bx) Reg_SO = Reg_WFF[31];
+          if (Buf_SI !== 1'bx) begin
+            if (Buf_WE == 0) begin
+              if (Buf_SENSE !== 1'bx) begin
+                Reg_WFF[31] = Reg_WFF[30];
+                Flag_WFF_SET[31] = Flag_WFF_SET[30];
+                Reg_WFF[30] = Reg_WFF[29];
+                Flag_WFF_SET[30] = Flag_WFF_SET[29];
+                Reg_WFF[29] = Reg_WFF[28];
+                Flag_WFF_SET[29] = Flag_WFF_SET[28];
+                Reg_WFF[28] = Reg_WFF[27];
+                Flag_WFF_SET[28] = Flag_WFF_SET[27];
+                Reg_WFF[27] = Reg_WFF[26];
+                Flag_WFF_SET[27] = Flag_WFF_SET[26];
+                Reg_WFF[26] = Reg_WFF[25];
+                Flag_WFF_SET[26] = Flag_WFF_SET[25];
+                Reg_WFF[25] = Reg_WFF[24];
+                Flag_WFF_SET[25] = Flag_WFF_SET[24];
+                Reg_WFF[24] = Reg_WFF[23];
+                Flag_WFF_SET[24] = Flag_WFF_SET[23];
+                Reg_WFF[23] = Reg_WFF[22];
+                Flag_WFF_SET[23] = Flag_WFF_SET[22];
+                Reg_WFF[22] = Reg_WFF[21];
+                Flag_WFF_SET[22] = Flag_WFF_SET[21];
+                Reg_WFF[21] = Reg_WFF[20];
+                Flag_WFF_SET[21] = Flag_WFF_SET[20];
+                Reg_WFF[20] = Reg_WFF[19];
+                Flag_WFF_SET[20] = Flag_WFF_SET[19];
+                Reg_WFF[19] = Reg_WFF[18];
+                Flag_WFF_SET[19] = Flag_WFF_SET[18];
+                Reg_WFF[18] = Reg_WFF[17];
+                Flag_WFF_SET[18] = Flag_WFF_SET[17];
+                Reg_WFF[17] = Reg_WFF[16];
+                Flag_WFF_SET[17] = Flag_WFF_SET[16];
+                Reg_WFF[16] = Reg_WFF[15];
+                Flag_WFF_SET[16] = Flag_WFF_SET[15];
+                Reg_WFF[15] = Reg_WFF[14];
+                Flag_WFF_SET[15] = Flag_WFF_SET[14];
+                Reg_WFF[14] = Reg_WFF[13];
+                Flag_WFF_SET[14] = Flag_WFF_SET[13];
+                Reg_WFF[13] = Reg_WFF[12];
+                Flag_WFF_SET[13] = Flag_WFF_SET[12];
+                Reg_WFF[12] = Reg_WFF[11];
+                Flag_WFF_SET[12] = Flag_WFF_SET[11];
+                Reg_WFF[11] = Reg_WFF[10];
+                Flag_WFF_SET[11] = Flag_WFF_SET[10];
+                Reg_WFF[10] = Reg_WFF[9];
+                Flag_WFF_SET[10] = Flag_WFF_SET[9];
+                Reg_WFF[9] = Reg_WFF[8];
+                Flag_WFF_SET[9] = Flag_WFF_SET[8];
+                Reg_WFF[8] = Reg_WFF[7];
+                Flag_WFF_SET[8] = Flag_WFF_SET[7];
+                Reg_WFF[7] = Reg_WFF[6];
+                Flag_WFF_SET[7] = Flag_WFF_SET[6];
+                Reg_WFF[6] = Reg_WFF[5];
+                Flag_WFF_SET[6] = Flag_WFF_SET[5];
+                Reg_WFF[5] = Reg_WFF[4];
+                Flag_WFF_SET[5] = Flag_WFF_SET[4];
+                Reg_WFF[4] = Reg_WFF[3];
+                Flag_WFF_SET[4] = Flag_WFF_SET[3];
+                Reg_WFF[3] = Reg_WFF[2];
+                Flag_WFF_SET[3] = Flag_WFF_SET[2];
+                Reg_WFF[2] = Reg_WFF[1];
+                Flag_WFF_SET[2] = Flag_WFF_SET[1];
+                Reg_WFF[1] = Reg_WFF[0];
+                Flag_WFF_SET[1] = Flag_WFF_SET[0];
+                Reg_WFF[0]  = Buf_SI;
+                Flag_WFF_SET[0]  = Buf_SI;
+                Reg_SO      = Reg_WFF[31];
+                `ifdef no_macro_msg
+                `else
+                `ifdef LML_MSG
+                  $display("\tMessage! Write Set mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
+                `endif
+                `endif
+              end
+            end
+          end
+          else begin  // SI = X
+            if (Buf_WE == 0) begin
+              TaskX;
+              `ifdef no_macro_msg
+              `else
+              `ifdef debug_message_LML
+                $display("\tError! Invalid SI Signal Detected at Write set mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
+              `else
+              `endif
+              `endif
+            end
+          end
+          if (Buf_WE === 1'bx) begin        // WE = X
+            TaskX;
+            `ifdef no_macro_msg
+            `else
+              $display("\tError! Invalid WE Signal Detected at Write set mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
+            `endif
+          end
+          else if (Buf_WE == 0 && Buf_SENSE === 1'bx) begin  // SENSE = X
+            TaskX;
+            `ifdef no_macro_msg
+            `else
+              $display("\tError! Invalid SENSE Signal Detected at Write set mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
+            `endif
+          end
+        end
+        else if (Buf_SM == 1) begin
+          if (Buf_WE == 0) begin
+            if (Buf_SENSE !== 1'bx) begin
+              if (Buf_SI !== 1'bx) begin
+                `ifdef no_macro_msg
+                `else
+                `ifdef LML_MSG
+                  $display("\tMessage! Write Update mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
+                `endif
+                `endif
+                Flag_Blow_Shift = 1'b0 ;
                                                                 Reg_WFF[31] = (|Reg_WFF[30:0] | Buf_SI) & Reg_WFF[31] ;
                                                                 Reg_WFF[30] = (|Reg_WFF[29:0] | Buf_SI) & Reg_WFF[30] ;
                                                                 Reg_WFF[29] = (|Reg_WFF[28:0] | Buf_SI) & Reg_WFF[29] ;
@@ -908,1257 +908,1257 @@ always @(Buf_CLK) begin
                                                                 Reg_WFF[2] = (|Reg_WFF[1:0] | Buf_SI) & Reg_WFF[2] ;
                                                                 Reg_WFF[1] = (|Reg_WFF[0] | Buf_SI) & Reg_WFF[1] ;
                                                                 Reg_WFF[0]  = Buf_SI & Reg_WFF[0];
-								Reg_SO    = |Reg_WFF | Buf_SI ;
-							end
-						end
-						else begin	// SENSE = X
-							TaskX;
-							`ifdef no_macro_msg
-							`else
-								$display("\tError! Invalid SENSE Signal Detected at Write-Update mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
-							`endif
-						end
-						if (Buf_SI === 1'bx) begin
-							TaskX;
-							`ifdef no_macro_msg
-							`else
-								$display("\tError! Invalid SI Signal Detected at Write-Update mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
-							`endif
-						end
-					end
-					else if (Buf_WE === 1'bx) begin		// WE = X
-						TaskX;
-						`ifdef no_macro_msg
-						`else
-							$display("\tError! Invalid WE Signal Detected at Write-Update mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
-						`endif
-					end
-					if (Buf_SI !== 1'bx && Buf_SENSE !== 1'bx && Flag_WFF_SET !== {32{1'b0}}) Reg_SO = |Reg_WFF | Buf_SI ;
-				end
-				else begin	// SM = X
-					if (Buf_WE == 0) begin
-						TaskX;
-						`ifdef no_macro_msg
-						`else
-							$display("\tError! Invalid SM Signal Detected at Write set or Update mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
-						`endif
-					end
-				end
-			end
-			else begin	// SEL = X
-				TaskX;
-				`ifdef no_macro_msg
-				`else
-					$display("\tError! Invalid SEL Signal Detected at Read or Write set mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
-				`endif
-			end
-			if (Buf_SM === 1'bx) begin
-				TaskX;
-				`ifdef no_macro_msg
-				`else
-					$display("\tError! Invalid SM Signal Detected \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
-				`endif
-			end
-			if (Buf_SI === 1'bx) begin
-				TaskX;
-				`ifdef no_macro_msg
-				`else
-					$display("\tError! Invalid SI Signal Detected \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
-				`endif
-			end
-		end
-		else if (Buf_EN === 1'bx) begin
-			TaskX;
-			`ifdef no_macro_msg
-			`else
-				$display("\tError! Invalid EN Signal Detected \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
-			`endif
-		end
-	end
-	if (Buf_CLK === 1'bx) begin
-		if (Buf_EN !== 1'b0) begin
-			TaskX;
-			`ifdef no_macro_msg
-			`else
-				$display("\tError! Invalid CLK Signal Detected  \n\tin %m\n\t(CLK : %0t);\n", $time);
-			`endif
-		end
-	end
-	Pre_CLK = Buf_CLK;
+                Reg_SO    = |Reg_WFF | Buf_SI ;
+              end
+            end
+            else begin  // SENSE = X
+              TaskX;
+              `ifdef no_macro_msg
+              `else
+                $display("\tError! Invalid SENSE Signal Detected at Write-Update mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
+              `endif
+            end
+            if (Buf_SI === 1'bx) begin
+              TaskX;
+              `ifdef no_macro_msg
+              `else
+                $display("\tError! Invalid SI Signal Detected at Write-Update mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
+              `endif
+            end
+          end
+          else if (Buf_WE === 1'bx) begin    // WE = X
+            TaskX;
+            `ifdef no_macro_msg
+            `else
+              $display("\tError! Invalid WE Signal Detected at Write-Update mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
+            `endif
+          end
+          if (Buf_SI !== 1'bx && Buf_SENSE !== 1'bx && Flag_WFF_SET !== {32{1'b0}}) Reg_SO = |Reg_WFF | Buf_SI ;
+        end
+        else begin  // SM = X
+          if (Buf_WE == 0) begin
+            TaskX;
+            `ifdef no_macro_msg
+            `else
+              $display("\tError! Invalid SM Signal Detected at Write set or Update mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
+            `endif
+          end
+        end
+      end
+      else begin  // SEL = X
+        TaskX;
+        `ifdef no_macro_msg
+        `else
+          $display("\tError! Invalid SEL Signal Detected at Read or Write set mode \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
+        `endif
+      end
+      if (Buf_SM === 1'bx) begin
+        TaskX;
+        `ifdef no_macro_msg
+        `else
+          $display("\tError! Invalid SM Signal Detected \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
+        `endif
+      end
+      if (Buf_SI === 1'bx) begin
+        TaskX;
+        `ifdef no_macro_msg
+        `else
+          $display("\tError! Invalid SI Signal Detected \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
+        `endif
+      end
+    end
+    else if (Buf_EN === 1'bx) begin
+      TaskX;
+      `ifdef no_macro_msg
+      `else
+        $display("\tError! Invalid EN Signal Detected \n\tin %m\n\t(edge[01] CLK : %0t);\n", $time);
+      `endif
+    end
+  end
+  if (Buf_CLK === 1'bx) begin
+    if (Buf_EN !== 1'b0) begin
+      TaskX;
+      `ifdef no_macro_msg
+      `else
+        $display("\tError! Invalid CLK Signal Detected  \n\tin %m\n\t(CLK : %0t);\n", $time);
+      `endif
+    end
+  end
+  Pre_CLK = Buf_CLK;
 end
 
 always @(Buf_EN) begin
-	if (Buf_EN === 1'bx) begin
-		if (Buf_VBLOW === 1'bx) begin
-			if ((Buf_SI !== 1'b1 && Buf_WE === 1'bx) || (Buf_SI !== 1'b1 && Buf_WE == 1)) begin
-				TaskX;
-				`ifdef no_macro_msg
-				`else
-					$display("\tError! Invalid EN Signal Detected  \n\tin %m\n\t(EN : %0t);\n", $time);
-				`endif
-			end
-		end
-		else if (Buf_VBLOW == 1) begin
-			if ((Buf_SI !== 1'b1 && Buf_WE === 1'bx) || (Buf_SI !== 1'b1 && Buf_WE == 1)) begin
-				TaskX;
-				`ifdef no_macro_msg
-				`else
-					$display("\tError! Invalid EN Signal Detected  \n\tin %m\n\t(EN : %0t);\n", $time);
-				`endif
- 
-			end
-		end
-	end
-	else if (Buf_EN == 1 && Pre_EN == 0) begin
-		if (Buf_VBLOW === 1'bx) begin
-			if ((Buf_SI !== 1'b1 && Buf_WE === 1'bx) || (Buf_SI !== 1'b1 && Buf_WE == 1)) begin
-				TaskX;
-				`ifdef no_macro_msg
-				`else
-					$display("\tError! Invalid EN Signal Detected  \n\tin %m\n\t(EN : %0t);\n", $time);
-				`endif
-			end
-		end
-		else if (Buf_VBLOW == 1) begin
-			if ((Buf_SI !== 1'b1 && Buf_WE === 1'bx) || (Buf_SI === 1'bx && Buf_WE == 1)) begin
-				TaskX;
-				`ifdef no_macro_msg
-				`else
-					$display("\tError! Invalid EN Signal Detected  \n\tin %m\n\t(EN : %0t);\n", $time);
-				`endif
- 
-			end
-		end
-	end
-	Pre_EN = Buf_EN;
+  if (Buf_EN === 1'bx) begin
+    if (Buf_VBLOW === 1'bx) begin
+      if ((Buf_SI !== 1'b1 && Buf_WE === 1'bx) || (Buf_SI !== 1'b1 && Buf_WE == 1)) begin
+        TaskX;
+        `ifdef no_macro_msg
+        `else
+          $display("\tError! Invalid EN Signal Detected  \n\tin %m\n\t(EN : %0t);\n", $time);
+        `endif
+      end
+    end
+    else if (Buf_VBLOW == 1) begin
+      if ((Buf_SI !== 1'b1 && Buf_WE === 1'bx) || (Buf_SI !== 1'b1 && Buf_WE == 1)) begin
+        TaskX;
+        `ifdef no_macro_msg
+        `else
+          $display("\tError! Invalid EN Signal Detected  \n\tin %m\n\t(EN : %0t);\n", $time);
+        `endif
+
+      end
+    end
+  end
+  else if (Buf_EN == 1 && Pre_EN == 0) begin
+    if (Buf_VBLOW === 1'bx) begin
+      if ((Buf_SI !== 1'b1 && Buf_WE === 1'bx) || (Buf_SI !== 1'b1 && Buf_WE == 1)) begin
+        TaskX;
+        `ifdef no_macro_msg
+        `else
+          $display("\tError! Invalid EN Signal Detected  \n\tin %m\n\t(EN : %0t);\n", $time);
+        `endif
+      end
+    end
+    else if (Buf_VBLOW == 1) begin
+      if ((Buf_SI !== 1'b1 && Buf_WE === 1'bx) || (Buf_SI === 1'bx && Buf_WE == 1)) begin
+        TaskX;
+        `ifdef no_macro_msg
+        `else
+          $display("\tError! Invalid EN Signal Detected  \n\tin %m\n\t(EN : %0t);\n", $time);
+        `endif
+
+      end
+    end
+  end
+  Pre_EN = Buf_EN;
 end
 
 always @(Buf_SEL) begin
-	if (Buf_SEL == 0 && Pre_SEL == 1) Reg_SO = Reg_RFF[31];
-	else if (Buf_SEL == 1 && Pre_SEL == 0) begin
-		if (Buf_SM == 0) Reg_SO = Reg_WFF[31];
-		else if (Buf_SM == 1 && Buf_SI !== 1'bx) Reg_SO = |Reg_WFF | Buf_SI ;
-		else if (Buf_SM === 1'bx) Reg_SO = 1'bx ;
-		else if (Buf_EN == 0 && Buf_SENSE !== 1'bx && Buf_VBLOW == 0) Reg_SO = |Reg_WFF | Buf_SI ; 
-	end
-	else if (Buf_SEL == 0) begin
-		if (Buf_EN == 0 && Buf_SENSE !== 1'bx && Buf_VBLOW == 0) begin
-			Reg_SO = Reg_RFF[31];
-		end
-	end
-	else if (Buf_SEL == 1) begin
-		if (Buf_EN == 0 && Buf_SENSE !== 1'bx && Buf_VBLOW == 0) begin
-			if (Buf_SM == 0) Reg_SO = Reg_WFF[31];
-			else if (Buf_SM == 1) Reg_SO = |Reg_WFF | Buf_SI ;
-			else  Reg_SO = 1'bx;
-		end
-	end
-	else if (Buf_SEL === 1'bx) begin
-		if (Buf_EN !== 1'b0 || Buf_VBLOW !== 1'b0) TaskX;
-		Reg_SO = 1'bx;
-		`ifdef no_macro_msg
-		`else
-			$display("\tError! Invalid SEL Signal Detected  \n\tin %m\n\t(SEL : %0t);\n", $time);
-		`endif
-	end
-	Pre_SEL = Buf_SEL;
+  if (Buf_SEL == 0 && Pre_SEL == 1) Reg_SO = Reg_RFF[31];
+  else if (Buf_SEL == 1 && Pre_SEL == 0) begin
+    if (Buf_SM == 0) Reg_SO = Reg_WFF[31];
+    else if (Buf_SM == 1 && Buf_SI !== 1'bx) Reg_SO = |Reg_WFF | Buf_SI ;
+    else if (Buf_SM === 1'bx) Reg_SO = 1'bx ;
+    else if (Buf_EN == 0 && Buf_SENSE !== 1'bx && Buf_VBLOW == 0) Reg_SO = |Reg_WFF | Buf_SI ;
+  end
+  else if (Buf_SEL == 0) begin
+    if (Buf_EN == 0 && Buf_SENSE !== 1'bx && Buf_VBLOW == 0) begin
+      Reg_SO = Reg_RFF[31];
+    end
+  end
+  else if (Buf_SEL == 1) begin
+    if (Buf_EN == 0 && Buf_SENSE !== 1'bx && Buf_VBLOW == 0) begin
+      if (Buf_SM == 0) Reg_SO = Reg_WFF[31];
+      else if (Buf_SM == 1) Reg_SO = |Reg_WFF | Buf_SI ;
+      else  Reg_SO = 1'bx;
+    end
+  end
+  else if (Buf_SEL === 1'bx) begin
+    if (Buf_EN !== 1'b0 || Buf_VBLOW !== 1'b0) TaskX;
+    Reg_SO = 1'bx;
+    `ifdef no_macro_msg
+    `else
+      $display("\tError! Invalid SEL Signal Detected  \n\tin %m\n\t(SEL : %0t);\n", $time);
+    `endif
+  end
+  Pre_SEL = Buf_SEL;
 end
 
 always @(Buf_SM) begin
-	if (Buf_SM == 0 && Pre_SM == 1) begin
-		if (Buf_SEL == 1) Reg_SO = Reg_WFF[31];
-	end
-	else if (Buf_SM == 1 && Pre_SM == 0) begin
-		if (Buf_SEL == 1 && Buf_SI !== 1'bx) Reg_SO = |Reg_WFF | Buf_SI ;
-		else if (Buf_EN == 0 && Buf_SENSE !== 1'bx && Buf_VBLOW == 0) begin
-			if (Buf_SEL == 1) Reg_SO = |Reg_WFF | Buf_SI ;
-		end
-	end
-	else if (Buf_SM == 0) begin
-		if (Buf_EN == 0 && Buf_SENSE !== 1'bx && Buf_VBLOW == 0) begin
-			if (Buf_SEL == 1) Reg_SO = Reg_WFF[31];
-		end
-	end
-	else if (Buf_SM == 1) begin
-		if (Buf_EN == 0 && Buf_SENSE !== 1'bx && Buf_VBLOW == 0) begin
-			if (Buf_SEL == 1) Reg_SO = |Reg_WFF | Buf_SI ;
-		end
-	end
-	else if (Buf_SM === 1'bx) begin
-		if (Buf_SEL == 1) begin
-			Reg_SO = 1'bx;
-			`ifdef no_macro_msg
-			`else
-				$display("\tError! Invalid SM Signal Detected \n\tin %m\n\t(SM : %0t);\n", $time);
-			`endif
-		end
-	end
-	Pre_SM = Buf_SM;
+  if (Buf_SM == 0 && Pre_SM == 1) begin
+    if (Buf_SEL == 1) Reg_SO = Reg_WFF[31];
+  end
+  else if (Buf_SM == 1 && Pre_SM == 0) begin
+    if (Buf_SEL == 1 && Buf_SI !== 1'bx) Reg_SO = |Reg_WFF | Buf_SI ;
+    else if (Buf_EN == 0 && Buf_SENSE !== 1'bx && Buf_VBLOW == 0) begin
+      if (Buf_SEL == 1) Reg_SO = |Reg_WFF | Buf_SI ;
+    end
+  end
+  else if (Buf_SM == 0) begin
+    if (Buf_EN == 0 && Buf_SENSE !== 1'bx && Buf_VBLOW == 0) begin
+      if (Buf_SEL == 1) Reg_SO = Reg_WFF[31];
+    end
+  end
+  else if (Buf_SM == 1) begin
+    if (Buf_EN == 0 && Buf_SENSE !== 1'bx && Buf_VBLOW == 0) begin
+      if (Buf_SEL == 1) Reg_SO = |Reg_WFF | Buf_SI ;
+    end
+  end
+  else if (Buf_SM === 1'bx) begin
+    if (Buf_SEL == 1) begin
+      Reg_SO = 1'bx;
+      `ifdef no_macro_msg
+      `else
+        $display("\tError! Invalid SM Signal Detected \n\tin %m\n\t(SM : %0t);\n", $time);
+      `endif
+    end
+  end
+  Pre_SM = Buf_SM;
 end
 
 always @(Buf_SI) begin
-	if (Buf_SI == 0 && Pre_SI == 1) begin
-		if (Buf_SEL == 1 && Buf_SM == 1) Reg_SO = |Reg_WFF | Buf_SI ;
-	end
-	else if (Buf_SI == 1 && Pre_SI == 0) begin
-		if (Buf_SEL == 1 && Buf_SM == 1) Reg_SO = |Reg_WFF | Buf_SI ;
-	end
-	else if (Buf_SI == 0 || SI == 1) begin
-		if (Buf_EN == 0 && Buf_SENSE !== 1'bx && Buf_VBLOW == 0) begin
-			if (Buf_SEL == 1 && Buf_SM == 1) Reg_SO = |Reg_WFF | Buf_SI ;
-		end
-	end
-	else if (Buf_SI === 1'bx) begin
-		if (Buf_EN !== 1'b0 || Buf_VBLOW !== 1'b0) begin
-			if (Buf_SEL == 1 && Buf_SM ==1) begin
-				TaskX;
-				`ifdef no_macro_msg
-				`else
-					$display("\tError! Invalid SI Signal Detected \n\tin %m\n\t(SI : %0t);\n", $time);
-				`endif
-			end
-		end
-		if (Buf_VBLOW === 1'bx) begin
-			if ((Buf_EN !== 1'b0 && Buf_WE === 1'bx) || (Buf_EN !== 1'b0 && Buf_WE == 1)) begin
-				TaskX;
-				`ifdef no_macro_msg
-				`else
-					$display("\tError! Invalid SI Signal Detected  \n\tin %m\n\t(SI : %0t);\n", $time);
-				`endif
-			end
-		end
-		else if (Buf_VBLOW == 1) begin
-			if ((Buf_EN !== 1'b0 && Buf_WE === 1'bx) || (Buf_EN !== 1'b0 && Buf_WE == 1)) begin
-				TaskX;
-				`ifdef no_macro_msg
-				`else
-					$display("\tError! Invalid SI Signal Detected  \n\tin %m\n\t(SI : %0t);\n", $time);
-				`endif
- 
-			end
-		end
-		if (Buf_SEL == 1 && Buf_SM == 1) Reg_SO = 1'bx;
-	end
-	Pre_SI = Buf_SI;
+  if (Buf_SI == 0 && Pre_SI == 1) begin
+    if (Buf_SEL == 1 && Buf_SM == 1) Reg_SO = |Reg_WFF | Buf_SI ;
+  end
+  else if (Buf_SI == 1 && Pre_SI == 0) begin
+    if (Buf_SEL == 1 && Buf_SM == 1) Reg_SO = |Reg_WFF | Buf_SI ;
+  end
+  else if (Buf_SI == 0 || SI == 1) begin
+    if (Buf_EN == 0 && Buf_SENSE !== 1'bx && Buf_VBLOW == 0) begin
+      if (Buf_SEL == 1 && Buf_SM == 1) Reg_SO = |Reg_WFF | Buf_SI ;
+    end
+  end
+  else if (Buf_SI === 1'bx) begin
+    if (Buf_EN !== 1'b0 || Buf_VBLOW !== 1'b0) begin
+      if (Buf_SEL == 1 && Buf_SM ==1) begin
+        TaskX;
+        `ifdef no_macro_msg
+        `else
+          $display("\tError! Invalid SI Signal Detected \n\tin %m\n\t(SI : %0t);\n", $time);
+        `endif
+      end
+    end
+    if (Buf_VBLOW === 1'bx) begin
+      if ((Buf_EN !== 1'b0 && Buf_WE === 1'bx) || (Buf_EN !== 1'b0 && Buf_WE == 1)) begin
+        TaskX;
+        `ifdef no_macro_msg
+        `else
+          $display("\tError! Invalid SI Signal Detected  \n\tin %m\n\t(SI : %0t);\n", $time);
+        `endif
+      end
+    end
+    else if (Buf_VBLOW == 1) begin
+      if ((Buf_EN !== 1'b0 && Buf_WE === 1'bx) || (Buf_EN !== 1'b0 && Buf_WE == 1)) begin
+        TaskX;
+        `ifdef no_macro_msg
+        `else
+          $display("\tError! Invalid SI Signal Detected  \n\tin %m\n\t(SI : %0t);\n", $time);
+        `endif
+
+      end
+    end
+    if (Buf_SEL == 1 && Buf_SM == 1) Reg_SO = 1'bx;
+  end
+  Pre_SI = Buf_SI;
 end
 
 always @(Buf_VBLOW) begin
-	if (Buf_VBLOW === 1'bx) begin
-		if (Buf_EN !== 1'b0 && Buf_SI !== 1'b1 && Buf_WE !== 1'b0) begin
-			TaskX;
-			`ifdef no_macro_msg
-			`else
-				$display("\tError! Invalid VBLOW Signal Detected \n\tin %m\n\t(VBLOW : %0t);\n", $time);
-			`endif
-		end
-	end
-	Pre_VBLOW = Buf_VBLOW;
+  if (Buf_VBLOW === 1'bx) begin
+    if (Buf_EN !== 1'b0 && Buf_SI !== 1'b1 && Buf_WE !== 1'b0) begin
+      TaskX;
+      `ifdef no_macro_msg
+      `else
+        $display("\tError! Invalid VBLOW Signal Detected \n\tin %m\n\t(VBLOW : %0t);\n", $time);
+      `endif
+    end
+  end
+  Pre_VBLOW = Buf_VBLOW;
 end
 
 // WE operation
 // Write Blow mode
 always @(Buf_WE) begin
-	if (Buf_WE == 1 && Pre_WE == 0) begin
-		WE_pos_time = $time;
-		if (Buf_EN == 1) begin
-			if (Buf_SEL == 1) begin
-				if (Buf_SM == 1) begin
-					if (Buf_CLK !== 1'bx) begin
-						if (Buf_SENSE !== 1'bx) begin
-							if (Buf_VBLOW == 1) begin
-								if (Buf_SI == 0) begin
-									if (|Flag_WFF_SET == 1) begin
-										if (Flag_WFF_SET[0] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[0] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[0] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[0] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow0 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[0] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow0 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[1] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[1] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[1] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[1] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow1 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[1] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow1 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[2] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[2] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[2] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[2] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow2 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[2] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow2 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[3] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[3] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[3] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[3] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow3 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[3] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow3 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[4] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[4] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[4] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[4] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow4 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[4] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow4 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[5] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[5] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[5] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[5] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow5 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[5] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow5 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[6] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[6] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[6] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[6] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow6 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[6] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow6 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[7] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[7] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[7] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[7] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow7 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[7] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow7 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[8] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[8] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[8] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[8] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow8 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[8] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow8 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[9] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[9] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[9] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[9] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow9 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[9] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow9 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[10] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[10] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[10] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[10] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow10 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[10] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow10 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[11] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[11] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[11] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[11] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow11 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[11] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow11 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[12] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[12] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[12] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[12] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow12 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[12] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow12 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[13] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[13] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[13] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[13] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow13 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[13] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow13 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[14] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[14] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[14] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[14] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow14 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[14] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow14 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[15] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[15] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[15] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[15] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow15 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[15] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow15 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[16] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[16] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[16] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[16] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow16 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[16] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow16 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[17] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[17] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[17] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[17] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow17 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[17] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow17 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[18] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[18] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[18] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[18] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow18 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[18] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow18 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[19] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[19] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[19] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[19] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow19 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[19] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow19 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[20] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[20] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[20] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[20] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow20 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[20] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow20 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[21] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[21] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[21] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[21] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow21 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[21] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow21 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[22] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[22] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[22] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[22] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow22 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[22] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow22 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[23] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[23] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[23] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[23] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow23 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[23] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow23 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[24] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[24] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[24] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[24] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow24 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[24] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow24 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[25] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[25] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[25] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[25] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow25 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[25] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow25 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[26] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[26] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[26] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[26] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow26 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[26] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow26 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[27] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[27] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[27] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[27] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow27 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[27] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow27 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[28] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[28] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[28] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[28] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow28 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[28] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow28 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[29] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[29] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[29] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[29] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow29 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[29] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow29 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[30] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[30] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[30] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[30] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow30 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[30] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow30 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-										if (Flag_WFF_SET[31] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
-											`ifdef Over_Blow_chk
-											if (Flag_Over_Blow[31] !== 1'b1 ) begin
-											`endif
-												Reg_SO = |Reg_WFF | Buf_SI ;
-												Flag_WFF_SET[31] = 1'b0 ;
-												`ifdef Over_Blow_chk
-												Flag_Over_Blow[31] = 1'b1 ;
-												`endif
-												Flag_Blow_Shift = 1'b1 ;
-												`ifdef no_macro_msg
-												`else
-												`ifdef LML_MSG
-					   				   			$display("\tMessage! Blow31 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-												`endif
-											`ifdef Over_Blow_chk
-											end
-											else if (Flag_Over_Blow[31] == 1) begin
-												TaskX;
-												`ifdef no_macro_msg
-												`else
-												$display("\tError Message! Over Blow31 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-												`endif
-											end
-											`endif
-										end
-									end
-								end
-							end
-						end
-					end
-					else if (Buf_CLK === 1'bx) begin
-						if (Buf_SI == 0 && Buf_VBLOW == 1) begin
-							TaskX;
-							`ifdef no_macro_msg
-							`else
-							   $display("\tError! Invalid CLK Signal Detected at Write-Blow mode \n\tin %m\n\t(CLK : %0t);\n", $time);
-							`endif
-						end
-					end
-					if (Buf_SI === 1'bx) begin
-						if (Buf_VBLOW == 1) begin
-							TaskX;
-							`ifdef no_macro_msg
-							`else
-							   $display("\tError! Invalid SI Signal Detected at Write-Blow mode \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-							`endif
-						end
-					end
-					if (Buf_VBLOW === 1'bx) begin
-						if (Buf_SI == 0) begin
-							TaskX;
-							`ifdef no_macro_msg
-							`else
-							   $display("\tError! Invalid VBLOW Signal Detected at Write-Blow mode \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-							`endif
-						end
-					end
-				end
-			end
-		end
-		else if (Buf_EN === 1'bx) begin
-			if (Buf_SEL == 1 && Buf_SM == 1 && Buf_SI == 0 && Buf_VBLOW == 1) begin
-				TaskX;
-				`ifdef no_macro_msg
-				`else
-				   $display("\tError! Invalid EN Signal Detected at Write-Blow mode \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
-				`endif
-			end
-		end
-	end
-	else if (Buf_WE == 0 && Pre_WE == 1) begin
-		WE_neg_time = $time;
-		if (Buf_EN == 1) begin
-			if (Buf_SEL == 1 && Buf_SM == 1) begin
-				if (Buf_SI === 1'bx && Buf_VBLOW == 1) begin
-					TaskX ;
-					`ifdef no_macro_msg
-					`else
-					   $display("\tError! Invalid SI Signal Detected at Write-Blow mode \n\tin %m\n\t(WE : %0t);\n", $time);
-					`endif
-				end
-				else if (Buf_SI == 0 && Buf_CLK === 1'bx && Buf_VBLOW == 1) begin
-					TaskX ;
-					`ifdef no_macro_msg
-					`else
-					   $display("\tError! Invalid CLK Signal Detected at Write-Blow mode \n\tin %m\n\t(WE : %0t);\n", $time);
-					`endif
-				end
-				else if (Buf_SI == 0 && Buf_VBLOW === 1'bx) begin
-					TaskX ;
-					`ifdef no_macro_msg
-					`else
-					   $display("\tError! Invalid VBLOW Signal Detected at Write-Blow mode \n\tin %m\n\t(WE : %0t);\n", $time);
-					`endif
-				end
-			end
-		end
-		else if (Buf_EN === 1'bx) begin
-			if (Buf_SEL == 1 && Buf_SM == 1 && Buf_SI == 0 && Buf_VBLOW == 1) begin
-				TaskX ;
-				`ifdef no_macro_msg
-				`else
-				   $display("\tError! Invalid EN Signal Detected at Write-Blow mode \n\tin %m\n\t(WE : %0t);\n", $time);
-				`endif
-			end
+  if (Buf_WE == 1 && Pre_WE == 0) begin
+    WE_pos_time = $time;
+    if (Buf_EN == 1) begin
+      if (Buf_SEL == 1) begin
+        if (Buf_SM == 1) begin
+          if (Buf_CLK !== 1'bx) begin
+            if (Buf_SENSE !== 1'bx) begin
+              if (Buf_VBLOW == 1) begin
+                if (Buf_SI == 0) begin
+                  if (|Flag_WFF_SET == 1) begin
+                    if (Flag_WFF_SET[0] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[0] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[0] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[0] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow0 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[0] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow0 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[1] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[1] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[1] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[1] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow1 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[1] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow1 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[2] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[2] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[2] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[2] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow2 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[2] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow2 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[3] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[3] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[3] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[3] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow3 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[3] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow3 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[4] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[4] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[4] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[4] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow4 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[4] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow4 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[5] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[5] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[5] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[5] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow5 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[5] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow5 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[6] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[6] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[6] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[6] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow6 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[6] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow6 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[7] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[7] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[7] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[7] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow7 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[7] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow7 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[8] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[8] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[8] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[8] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow8 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[8] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow8 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[9] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[9] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[9] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[9] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow9 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[9] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow9 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[10] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[10] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[10] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[10] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow10 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[10] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow10 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[11] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[11] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[11] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[11] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow11 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[11] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow11 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[12] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[12] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[12] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[12] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow12 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[12] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow12 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[13] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[13] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[13] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[13] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow13 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[13] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow13 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[14] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[14] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[14] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[14] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow14 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[14] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow14 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[15] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[15] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[15] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[15] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow15 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[15] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow15 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[16] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[16] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[16] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[16] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow16 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[16] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow16 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[17] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[17] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[17] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[17] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow17 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[17] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow17 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[18] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[18] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[18] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[18] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow18 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[18] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow18 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[19] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[19] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[19] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[19] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow19 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[19] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow19 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[20] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[20] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[20] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[20] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow20 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[20] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow20 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[21] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[21] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[21] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[21] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow21 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[21] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow21 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[22] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[22] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[22] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[22] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow22 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[22] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow22 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[23] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[23] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[23] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[23] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow23 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[23] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow23 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[24] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[24] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[24] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[24] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow24 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[24] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow24 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[25] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[25] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[25] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[25] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow25 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[25] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow25 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[26] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[26] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[26] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[26] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow26 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[26] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow26 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[27] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[27] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[27] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[27] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow27 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[27] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow27 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[28] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[28] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[28] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[28] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow28 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[28] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow28 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[29] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[29] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[29] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[29] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow29 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[29] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow29 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[30] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[30] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[30] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[30] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow30 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[30] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow30 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                    if (Flag_WFF_SET[31] == 1 && Flag_Blow_Shift !== 1'b1 && Reg_SO == 1 ) begin
+                      `ifdef Over_Blow_chk
+                      if (Flag_Over_Blow[31] !== 1'b1 ) begin
+                      `endif
+                        Reg_SO = |Reg_WFF | Buf_SI ;
+                        Flag_WFF_SET[31] = 1'b0 ;
+                        `ifdef Over_Blow_chk
+                        Flag_Over_Blow[31] = 1'b1 ;
+                        `endif
+                        Flag_Blow_Shift = 1'b1 ;
+                        `ifdef no_macro_msg
+                        `else
+                        `ifdef LML_MSG
+                              $display("\tMessage! Blow31 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                        `endif
+                      `ifdef Over_Blow_chk
+                      end
+                      else if (Flag_Over_Blow[31] == 1) begin
+                        TaskX;
+                        `ifdef no_macro_msg
+                        `else
+                        $display("\tError Message! Over Blow31 \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+                        `endif
+                      end
+                      `endif
+                    end
+                  end
+                end
+              end
+            end
+          end
+          else if (Buf_CLK === 1'bx) begin
+            if (Buf_SI == 0 && Buf_VBLOW == 1) begin
+              TaskX;
+              `ifdef no_macro_msg
+              `else
+                 $display("\tError! Invalid CLK Signal Detected at Write-Blow mode \n\tin %m\n\t(CLK : %0t);\n", $time);
+              `endif
+            end
+          end
+          if (Buf_SI === 1'bx) begin
+            if (Buf_VBLOW == 1) begin
+              TaskX;
+              `ifdef no_macro_msg
+              `else
+                 $display("\tError! Invalid SI Signal Detected at Write-Blow mode \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+              `endif
+            end
+          end
+          if (Buf_VBLOW === 1'bx) begin
+            if (Buf_SI == 0) begin
+              TaskX;
+              `ifdef no_macro_msg
+              `else
+                 $display("\tError! Invalid VBLOW Signal Detected at Write-Blow mode \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+              `endif
+            end
+          end
+        end
+      end
+    end
+    else if (Buf_EN === 1'bx) begin
+      if (Buf_SEL == 1 && Buf_SM == 1 && Buf_SI == 0 && Buf_VBLOW == 1) begin
+        TaskX;
+        `ifdef no_macro_msg
+        `else
+           $display("\tError! Invalid EN Signal Detected at Write-Blow mode \n\tin %m\n\t(edge[01] WE : %0t);\n", $time);
+        `endif
+      end
+    end
+  end
+  else if (Buf_WE == 0 && Pre_WE == 1) begin
+    WE_neg_time = $time;
+    if (Buf_EN == 1) begin
+      if (Buf_SEL == 1 && Buf_SM == 1) begin
+        if (Buf_SI === 1'bx && Buf_VBLOW == 1) begin
+          TaskX ;
+          `ifdef no_macro_msg
+          `else
+             $display("\tError! Invalid SI Signal Detected at Write-Blow mode \n\tin %m\n\t(WE : %0t);\n", $time);
+          `endif
+        end
+        else if (Buf_SI == 0 && Buf_CLK === 1'bx && Buf_VBLOW == 1) begin
+          TaskX ;
+          `ifdef no_macro_msg
+          `else
+             $display("\tError! Invalid CLK Signal Detected at Write-Blow mode \n\tin %m\n\t(WE : %0t);\n", $time);
+          `endif
+        end
+        else if (Buf_SI == 0 && Buf_VBLOW === 1'bx) begin
+          TaskX ;
+          `ifdef no_macro_msg
+          `else
+             $display("\tError! Invalid VBLOW Signal Detected at Write-Blow mode \n\tin %m\n\t(WE : %0t);\n", $time);
+          `endif
+        end
+      end
+    end
+    else if (Buf_EN === 1'bx) begin
+      if (Buf_SEL == 1 && Buf_SM == 1 && Buf_SI == 0 && Buf_VBLOW == 1) begin
+        TaskX ;
+        `ifdef no_macro_msg
+        `else
+           $display("\tError! Invalid EN Signal Detected at Write-Blow mode \n\tin %m\n\t(WE : %0t);\n", $time);
+        `endif
+      end
 
-		end
+    end
 `ifdef FAST_FUNC
 `else
-		if (Buf_EN !== 1'b0 || Buf_VBLOW !== 1'b0) begin
-			if (WE_neg_time - WE_pos_time > tTw_we_Hmax || WE_neg_time - WE_pos_time < tTw_we_Hmin) begin
-				TaskX;
-				`ifdef no_macro_msg
-				`else
-				   $display("\tError! Timing violation(WE high pulse). \n\tin %m\n\t(edge[10] WE : %0t);\n", $time);
-				`endif
-			end
-		end
+    if (Buf_EN !== 1'b0 || Buf_VBLOW !== 1'b0) begin
+      if (WE_neg_time - WE_pos_time > tTw_we_Hmax || WE_neg_time - WE_pos_time < tTw_we_Hmin) begin
+        TaskX;
+        `ifdef no_macro_msg
+        `else
+           $display("\tError! Timing violation(WE high pulse). \n\tin %m\n\t(edge[10] WE : %0t);\n", $time);
+        `endif
+      end
+    end
 `endif
-	end
-	else if (Buf_WE === 1'bx) begin
-		if (Buf_EN == 1 && Buf_SEL == 1 && Buf_SM == 1 && Buf_SI == 0 && Buf_VBLOW == 1) begin
-			TaskX;
-			`ifdef no_macro_msg
-			`else
-			   $display("\tError! Invalid WE Signal Detected at Write-Blow mode \n\tin %m\n\t(WE : %0t);\n", $time);
-			`endif
-		end
-		if (Buf_EN !== 1'b0 && Buf_SI !== 1'b1 && Buf_VBLOW !== 1'b0) begin
-			TaskX;
-			`ifdef no_macro_msg
-			`else
-			   $display("\tError! Invalid WE Signal Detected at Write-Blow mode \n\tin %m\n\t(WE : %0t);\n", $time);
-			`endif
+  end
+  else if (Buf_WE === 1'bx) begin
+    if (Buf_EN == 1 && Buf_SEL == 1 && Buf_SM == 1 && Buf_SI == 0 && Buf_VBLOW == 1) begin
+      TaskX;
+      `ifdef no_macro_msg
+      `else
+         $display("\tError! Invalid WE Signal Detected at Write-Blow mode \n\tin %m\n\t(WE : %0t);\n", $time);
+      `endif
+    end
+    if (Buf_EN !== 1'b0 && Buf_SI !== 1'b1 && Buf_VBLOW !== 1'b0) begin
+      TaskX;
+      `ifdef no_macro_msg
+      `else
+         $display("\tError! Invalid WE Signal Detected at Write-Blow mode \n\tin %m\n\t(WE : %0t);\n", $time);
+      `endif
 
-		end
-	end
-	Pre_WE = Buf_WE;
+    end
+  end
+  Pre_WE = Buf_WE;
 end
 
 task TaskX ;
 begin
-	Reg_RFF = 32'bx ;
-	Reg_WFF = 32'bx ;
-	Reg_FO  = 32'bx ;
-	Reg_SO  = 1'bx;
+  Reg_RFF = 32'bx ;
+  Reg_WFF = 32'bx ;
+  Reg_FO  = 32'bx ;
+  Reg_SO  = 1'bx;
 end
 endtask
 
 endmodule
 `ifdef verifault
-	`nosuppress_faults
-	`disable_portfaults
+  `nosuppress_faults
+  `disable_portfaults
 `endif
 `endcelldefine

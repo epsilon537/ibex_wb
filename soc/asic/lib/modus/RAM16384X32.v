@@ -3,7 +3,7 @@
 // Intended for use with Modus and Diagnostics
 // Cadence Design Systems, Inc.
 // Created on: Fri Dec  6 08:22:13 CET 2019
- 
+
 `celldefine
   (* ET_MEM_VERSION="6.2.3" *)
   (* ET_MEM_LEVEL="WRAPPER" *)
@@ -25,8 +25,8 @@ input  [5:0] FO ;
   (* K_FLAG="+TI" *)
   (* CT_TEST="+TI" *)
 input  SLP ;
- 
-// create an instance of a buffer block for each input / output 
+
+// create an instance of a buffer block for each input / output
 wire [0:31] buf_A;
 __buf_bus_32 ibuf_A (A, buf_A);
 wire [0:31] buf_I;
@@ -45,17 +45,17 @@ wire [0:5] buf_FO;
 __buf_bus_6 ibuf_FO (buf_FO, FO);
 wire buf_SLP;
 __buf_bus_1 ibuf_SLP (buf_SLP, SLP);
- 
-// Instantiate the internal layer 
+
+// Instantiate the internal layer
 __RAM16384X32 i1(buf_A ,buf_I ,buf_IA ,buf_DM ,buf_CK ,buf_CE ,buf_WE ,buf_FO ,buf_SLP );
 endmodule
 `endcelldefine
- 
- 
+
+
 // ************************************************
 // buffer / TSD bus
 // ************************************************
- 
+
 `celldefine
 module __buf_bus_32 (out, in);
 output [0:31] out;
@@ -96,11 +96,11 @@ endmodule
 `endcelldefine
 
 
- 
+
 // ************************************************
 // buffer / TSD bus
 // ************************************************
- 
+
 `celldefine
 module __buf_bus_14 (out, in);
 output [0:13] out;
@@ -123,11 +123,11 @@ endmodule
 `endcelldefine
 
 
- 
+
 // ************************************************
 // buffer / TSD bus
 // ************************************************
- 
+
 `celldefine
 module __buf_bus_1 (out, in);
 output out;
@@ -137,11 +137,11 @@ endmodule
 `endcelldefine
 
 
- 
+
 // ************************************************
 // buffer / TSD bus
 // ************************************************
- 
+
 `celldefine
 module __buf_bus_6 (out, in);
 output [0:5] out;
@@ -177,7 +177,7 @@ input  [5:0] FO ;
   (* K_FLAG="+TI" *)
   (* CT_TEST="+TI" *)
 input  SLP ;
- 
+
 wire vdd = 1'b1;
 wire gnd = 1'b0;
 
@@ -525,7 +525,7 @@ LATCH_1 data_capture_P02D028 (latch_P02D028,dinPins1[28],WCLK_not1);
 LATCH_1 data_capture_P02D029 (latch_P02D029,dinPins1[29],WCLK_not1);
 LATCH_1 data_capture_P02D030 (latch_P02D030,dinPins1[30],WCLK_not1);
 LATCH_1 data_capture_P02D031 (latch_P02D031,dinPins1[31],WCLK_not1);
- 
+
 
 // Gate read clock and read enable signals
 not (RCLK_not0,rclkPin0);
@@ -579,7 +579,7 @@ xor xaddr_P01A12 (xor_P01A12,latch_P01A12,latch_P01A12);
 xor xaddr_P01A13 (xor_P01A13,latch_P01A13,latch_P01A13);
 or Corrupt_P1 (corruptenable1,xor_P01A00,xor_P01A01,xor_P01A02,xor_P01A03,xor_P01A04,xor_P01A05,xor_P01A06,xor_P01A07,xor_P01A08,xor_P01A09,xor_P01A10,xor_P01A11,xor_P01A12,xor_P01A13);
 
-// Add latch/DFF to latch RAM/ROM outputs 
+// Add latch/DFF to latch RAM/ROM outputs
 wire latch_P01_000;
   (* SUPPRESS_MSG="CSV350,CSV027" *)
   (* ET_RE_LIST="latch_renPin00 " *)
@@ -712,298 +712,298 @@ __rDFF dout_capture_P01_031 (A[31],latch_P01_031,latch_rclk_and_ren00);
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin10 latch_wenPin00 " *)
-RAM_A14_D001_BS memory_0 ({latch_P01_000}  
+RAM_A14_D001_BS memory_0 ({latch_P01_000}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D000} ,vdd ,latch_wclk_and_wen00  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D000} ,vdd ,latch_wclk_and_wen00
      ,{latch_P02D000} ,latch_wclk_and_wen10 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin11 latch_wenPin01 " *)
-RAM_A14_D001_BS memory_1 ({latch_P01_001}  
+RAM_A14_D001_BS memory_1 ({latch_P01_001}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D001} ,vdd ,latch_wclk_and_wen01  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D001} ,vdd ,latch_wclk_and_wen01
      ,{latch_P02D001} ,latch_wclk_and_wen11 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin12 latch_wenPin02 " *)
-RAM_A14_D001_BS memory_2 ({latch_P01_002}  
+RAM_A14_D001_BS memory_2 ({latch_P01_002}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D002} ,vdd ,latch_wclk_and_wen02  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D002} ,vdd ,latch_wclk_and_wen02
      ,{latch_P02D002} ,latch_wclk_and_wen12 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin13 latch_wenPin03 " *)
-RAM_A14_D001_BS memory_3 ({latch_P01_003}  
+RAM_A14_D001_BS memory_3 ({latch_P01_003}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D003} ,vdd ,latch_wclk_and_wen03  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D003} ,vdd ,latch_wclk_and_wen03
      ,{latch_P02D003} ,latch_wclk_and_wen13 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin14 latch_wenPin04 " *)
-RAM_A14_D001_BS memory_4 ({latch_P01_004}  
+RAM_A14_D001_BS memory_4 ({latch_P01_004}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D004} ,vdd ,latch_wclk_and_wen04  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D004} ,vdd ,latch_wclk_and_wen04
      ,{latch_P02D004} ,latch_wclk_and_wen14 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin15 latch_wenPin05 " *)
-RAM_A14_D001_BS memory_5 ({latch_P01_005}  
+RAM_A14_D001_BS memory_5 ({latch_P01_005}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D005} ,vdd ,latch_wclk_and_wen05  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D005} ,vdd ,latch_wclk_and_wen05
      ,{latch_P02D005} ,latch_wclk_and_wen15 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin16 latch_wenPin06 " *)
-RAM_A14_D001_BS memory_6 ({latch_P01_006}  
+RAM_A14_D001_BS memory_6 ({latch_P01_006}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D006} ,vdd ,latch_wclk_and_wen06  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D006} ,vdd ,latch_wclk_and_wen06
      ,{latch_P02D006} ,latch_wclk_and_wen16 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin17 latch_wenPin07 " *)
-RAM_A14_D001_BS memory_7 ({latch_P01_007}  
+RAM_A14_D001_BS memory_7 ({latch_P01_007}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D007} ,vdd ,latch_wclk_and_wen07  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D007} ,vdd ,latch_wclk_and_wen07
      ,{latch_P02D007} ,latch_wclk_and_wen17 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin18 latch_wenPin08 " *)
-RAM_A14_D001_BS memory_8 ({latch_P01_008}  
+RAM_A14_D001_BS memory_8 ({latch_P01_008}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D008} ,vdd ,latch_wclk_and_wen08  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D008} ,vdd ,latch_wclk_and_wen08
      ,{latch_P02D008} ,latch_wclk_and_wen18 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin19 latch_wenPin09 " *)
-RAM_A14_D001_BS memory_9 ({latch_P01_009}  
+RAM_A14_D001_BS memory_9 ({latch_P01_009}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D009} ,vdd ,latch_wclk_and_wen09  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D009} ,vdd ,latch_wclk_and_wen09
      ,{latch_P02D009} ,latch_wclk_and_wen19 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin110 latch_wenPin010 " *)
-RAM_A14_D001_BS memory_10 ({latch_P01_010}  
+RAM_A14_D001_BS memory_10 ({latch_P01_010}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D010} ,vdd ,latch_wclk_and_wen010  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D010} ,vdd ,latch_wclk_and_wen010
      ,{latch_P02D010} ,latch_wclk_and_wen110 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin111 latch_wenPin011 " *)
-RAM_A14_D001_BS memory_11 ({latch_P01_011}  
+RAM_A14_D001_BS memory_11 ({latch_P01_011}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D011} ,vdd ,latch_wclk_and_wen011  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D011} ,vdd ,latch_wclk_and_wen011
      ,{latch_P02D011} ,latch_wclk_and_wen111 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin112 latch_wenPin012 " *)
-RAM_A14_D001_BS memory_12 ({latch_P01_012}  
+RAM_A14_D001_BS memory_12 ({latch_P01_012}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D012} ,vdd ,latch_wclk_and_wen012  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D012} ,vdd ,latch_wclk_and_wen012
      ,{latch_P02D012} ,latch_wclk_and_wen112 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin113 latch_wenPin013 " *)
-RAM_A14_D001_BS memory_13 ({latch_P01_013}  
+RAM_A14_D001_BS memory_13 ({latch_P01_013}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D013} ,vdd ,latch_wclk_and_wen013  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D013} ,vdd ,latch_wclk_and_wen013
      ,{latch_P02D013} ,latch_wclk_and_wen113 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin114 latch_wenPin014 " *)
-RAM_A14_D001_BS memory_14 ({latch_P01_014}  
+RAM_A14_D001_BS memory_14 ({latch_P01_014}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D014} ,vdd ,latch_wclk_and_wen014  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D014} ,vdd ,latch_wclk_and_wen014
      ,{latch_P02D014} ,latch_wclk_and_wen114 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin115 latch_wenPin015 " *)
-RAM_A14_D001_BS memory_15 ({latch_P01_015}  
+RAM_A14_D001_BS memory_15 ({latch_P01_015}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D015} ,vdd ,latch_wclk_and_wen015  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D015} ,vdd ,latch_wclk_and_wen015
      ,{latch_P02D015} ,latch_wclk_and_wen115 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin116 latch_wenPin016 " *)
-RAM_A14_D001_BS memory_16 ({latch_P01_016}  
+RAM_A14_D001_BS memory_16 ({latch_P01_016}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D016} ,vdd ,latch_wclk_and_wen016  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D016} ,vdd ,latch_wclk_and_wen016
      ,{latch_P02D016} ,latch_wclk_and_wen116 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin117 latch_wenPin017 " *)
-RAM_A14_D001_BS memory_17 ({latch_P01_017}  
+RAM_A14_D001_BS memory_17 ({latch_P01_017}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D017} ,vdd ,latch_wclk_and_wen017  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D017} ,vdd ,latch_wclk_and_wen017
      ,{latch_P02D017} ,latch_wclk_and_wen117 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin118 latch_wenPin018 " *)
-RAM_A14_D001_BS memory_18 ({latch_P01_018}  
+RAM_A14_D001_BS memory_18 ({latch_P01_018}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D018} ,vdd ,latch_wclk_and_wen018  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D018} ,vdd ,latch_wclk_and_wen018
      ,{latch_P02D018} ,latch_wclk_and_wen118 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin119 latch_wenPin019 " *)
-RAM_A14_D001_BS memory_19 ({latch_P01_019}  
+RAM_A14_D001_BS memory_19 ({latch_P01_019}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D019} ,vdd ,latch_wclk_and_wen019  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D019} ,vdd ,latch_wclk_and_wen019
      ,{latch_P02D019} ,latch_wclk_and_wen119 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin120 latch_wenPin020 " *)
-RAM_A14_D001_BS memory_20 ({latch_P01_020}  
+RAM_A14_D001_BS memory_20 ({latch_P01_020}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D020} ,vdd ,latch_wclk_and_wen020  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D020} ,vdd ,latch_wclk_and_wen020
      ,{latch_P02D020} ,latch_wclk_and_wen120 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin121 latch_wenPin021 " *)
-RAM_A14_D001_BS memory_21 ({latch_P01_021}  
+RAM_A14_D001_BS memory_21 ({latch_P01_021}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D021} ,vdd ,latch_wclk_and_wen021  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D021} ,vdd ,latch_wclk_and_wen021
      ,{latch_P02D021} ,latch_wclk_and_wen121 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin122 latch_wenPin022 " *)
-RAM_A14_D001_BS memory_22 ({latch_P01_022}  
+RAM_A14_D001_BS memory_22 ({latch_P01_022}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D022} ,vdd ,latch_wclk_and_wen022  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D022} ,vdd ,latch_wclk_and_wen022
      ,{latch_P02D022} ,latch_wclk_and_wen122 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin123 latch_wenPin023 " *)
-RAM_A14_D001_BS memory_23 ({latch_P01_023}  
+RAM_A14_D001_BS memory_23 ({latch_P01_023}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D023} ,vdd ,latch_wclk_and_wen023  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D023} ,vdd ,latch_wclk_and_wen023
      ,{latch_P02D023} ,latch_wclk_and_wen123 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin124 latch_wenPin024 " *)
-RAM_A14_D001_BS memory_24 ({latch_P01_024}  
+RAM_A14_D001_BS memory_24 ({latch_P01_024}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D024} ,vdd ,latch_wclk_and_wen024  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D024} ,vdd ,latch_wclk_and_wen024
      ,{latch_P02D024} ,latch_wclk_and_wen124 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin125 latch_wenPin025 " *)
-RAM_A14_D001_BS memory_25 ({latch_P01_025}  
+RAM_A14_D001_BS memory_25 ({latch_P01_025}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D025} ,vdd ,latch_wclk_and_wen025  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D025} ,vdd ,latch_wclk_and_wen025
      ,{latch_P02D025} ,latch_wclk_and_wen125 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin126 latch_wenPin026 " *)
-RAM_A14_D001_BS memory_26 ({latch_P01_026}  
+RAM_A14_D001_BS memory_26 ({latch_P01_026}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D026} ,vdd ,latch_wclk_and_wen026  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D026} ,vdd ,latch_wclk_and_wen026
      ,{latch_P02D026} ,latch_wclk_and_wen126 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin127 latch_wenPin027 " *)
-RAM_A14_D001_BS memory_27 ({latch_P01_027}  
+RAM_A14_D001_BS memory_27 ({latch_P01_027}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D027} ,vdd ,latch_wclk_and_wen027  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D027} ,vdd ,latch_wclk_and_wen027
      ,{latch_P02D027} ,latch_wclk_and_wen127 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin128 latch_wenPin028 " *)
-RAM_A14_D001_BS memory_28 ({latch_P01_028}  
+RAM_A14_D001_BS memory_28 ({latch_P01_028}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D028} ,vdd ,latch_wclk_and_wen028  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D028} ,vdd ,latch_wclk_and_wen028
      ,{latch_P02D028} ,latch_wclk_and_wen128 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin129 latch_wenPin029 " *)
-RAM_A14_D001_BS memory_29 ({latch_P01_029}  
+RAM_A14_D001_BS memory_29 ({latch_P01_029}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D029} ,vdd ,latch_wclk_and_wen029  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D029} ,vdd ,latch_wclk_and_wen029
      ,{latch_P02D029} ,latch_wclk_and_wen129 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin130 latch_wenPin030 " *)
-RAM_A14_D001_BS memory_30 ({latch_P01_030}  
+RAM_A14_D001_BS memory_30 ({latch_P01_030}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D030} ,vdd ,latch_wclk_and_wen030  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D030} ,vdd ,latch_wclk_and_wen030
      ,{latch_P02D030} ,latch_wclk_and_wen130 );
 
 // Instance RAM/ROM primitive
   (* LPD="YES" *)
   (* ET_WE_LIST="latch_wenPin131 latch_wenPin031 " *)
-RAM_A14_D001_BS memory_31 ({latch_P01_031}  
+RAM_A14_D001_BS memory_31 ({latch_P01_031}
      ,{latch_P01A00,latch_P01A01,latch_P01A02,latch_P01A03,latch_P01A04
 ,latch_P01A05,latch_P01A06,latch_P01A07,latch_P01A08,latch_P01A09
-,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D031} ,vdd ,latch_wclk_and_wen031  
+,latch_P01A10,latch_P01A11,latch_P01A12,latch_P01A13} ,{latch_P01D031} ,vdd ,latch_wclk_and_wen031
      ,{latch_P02D031} ,latch_wclk_and_wen131 );
 endmodule
 `endcelldefine
- 
+
 // **************************************************
 //  RAM/ROM primitive module definition
 // **************************************************
 `celldefine
-module RAM_A14_D001_BS (P01_000 , P01A[0:13] , P01D000 , P01READ , P01WCLK , P02D000 , P02WCLK 
+module RAM_A14_D001_BS (P01_000 , P01A[0:13] , P01D000 , P01READ , P01WCLK , P02D000 , P02WCLK
      );
 output P01_000;
 input [0:13]  P01A;
@@ -1014,7 +1014,7 @@ input  P02D000;
 input  P02WCLK;
 endmodule
 `endcelldefine
- 
+
 // **************************************************
 //    Latch primitive definition
 // **************************************************

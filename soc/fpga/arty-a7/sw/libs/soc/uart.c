@@ -5,10 +5,10 @@
 #include <string.h>
 
 
-#define UART_REG_SETUP		0
-#define UART_REG_FIFO		1
-#define UART_REG_RXDATA		2
-#define UART_REG_TXDATA		3
+#define UART_REG_SETUP    0
+#define UART_REG_FIFO    1
+#define UART_REG_RXDATA    2
+#define UART_REG_TXDATA    3
 
 static unsigned remu10(unsigned n);
 static void qprintchar(struct uart * module, char **str, int c);
@@ -18,88 +18,88 @@ static int qprint(struct uart * module, char **out, const char *format, va_list 
 
 void uart_init(struct uart * module, volatile void * base_address)
 {
-	module->registers = (volatile uint32_t *)base_address;
+  module->registers = (volatile uint32_t *)base_address;
 }
 
 void uart_configure(struct uart * module, uint32_t config)
 {
-	module->registers[UART_REG_SETUP] = config;
+  module->registers[UART_REG_SETUP] = config;
 }
 
 int uart_tx_ready(struct uart * module)
 {
-	return module->registers[UART_REG_FIFO] & 0x00010000;
+  return module->registers[UART_REG_FIFO] & 0x00010000;
 }
 
 void uart_tx(struct uart * module, uint8_t byte)
 {
-	module->registers[UART_REG_TXDATA] = (uint32_t)byte;
+  module->registers[UART_REG_TXDATA] = (uint32_t)byte;
 }
 
 void uart_tx_string(struct uart * module, const char *str)
 {
-	for (uint32_t i = 0; str[i] != '\0'; i++) {
-		while (!uart_tx_ready(module))
-			;
-		uart_tx(module, (uint8_t)str[i]);
-	}
+  for (uint32_t i = 0; str[i] != '\0'; i++) {
+    while (!uart_tx_ready(module))
+      ;
+    uart_tx(module, (uint8_t)str[i]);
+  }
 }
 
 int uart_rx_ready(struct uart * module)
 {
-	return module->registers[UART_REG_FIFO] & 0x00000001;
+  return module->registers[UART_REG_FIFO] & 0x00000001;
 }
 
 uint8_t uart_rx(struct uart * module)
 {
-	return (uint8_t)(module->registers[UART_REG_RXDATA] & 0x000000FF);
+  return (uint8_t)(module->registers[UART_REG_RXDATA] & 0x000000FF);
 }
 
 uint32_t uart_rx_line(struct uart * module, char * str)
 {
-	uint32_t i = 0;
-	for (;;) {
-		while (!uart_rx_ready(module))
-			;
-		str[i] = uart_rx(module);
-		if (str[i] == '\n')
-			break;
-		i++;
-	}
-	str[i] = '\0';
-	return i;
+  uint32_t i = 0;
+  for (;;) {
+    while (!uart_rx_ready(module))
+      ;
+    str[i] = uart_rx(module);
+    if (str[i] == '\n')
+      break;
+    i++;
+  }
+  str[i] = '\0';
+  return i;
 }
 
 void uart_set_baudrate(struct uart * module, uint32_t baudrate, uint32_t clk_freq)
 {
-	module->registers[UART_REG_SETUP] = clk_freq / baudrate;
+  module->registers[UART_REG_SETUP] = clk_freq / baudrate;
 }
 
 //int uart_printf(struct uart * module, const char * fmt, ...)
 //{
-//	int result;
-//	char str[100];
-//	
-//	va_list argp;
-//	va_start(argp, fmt);
-//	result = vsnprintf(str, 100, fmt, argp);
-//	va_end(argp);
-//	uart_tx_string(module, str);
-//	
-//	return result;
+//  int result;
+//  char str[100];
+//
+//  va_list argp;
+//  va_start(argp, fmt);
+//  result = vsnprintf(str, 100, fmt, argp);
+//  va_end(argp);
+//  uart_tx_string(module, str);
+//
+//  return result;
 //}
 //
 //int uart_scanf(struct uart * module, const char * fmt, ...)
 //{
-//	char str[100];
-//	int result;
-//	uart_rx_line(module, str);
-//	
-//	va_list argp;
-//	va_start(argp, fmt);
-//	result = vsscanf(str, fmt, argp);
-//	va_end(argp);
-//	return result;
+//  char str[100];
+//  int result;
+//  uart_rx_line(module, str);
+//
+//  va_list argp;
+//  va_start(argp, fmt);
+//  result = vsscanf(str, fmt, argp);
+//  va_end(argp);
+//  return result;
 //}
 
 /* Nonzero if either X or Y is not aligned on a "long" boundary. */
@@ -132,10 +132,10 @@ static unsigned remu10(unsigned n) {
 
 int uart_putchar(struct uart * module, int s)
 {
-	while (!uart_tx_ready(module))
-			;
-	uart_tx(module, (uint8_t)s);
-	return s;
+  while (!uart_tx_ready(module))
+      ;
+  uart_tx(module, (uint8_t)s);
+  return s;
 }
 
 static void qprintchar(struct uart * module, char **str, int c)

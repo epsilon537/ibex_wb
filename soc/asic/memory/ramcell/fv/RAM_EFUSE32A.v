@@ -17,9 +17,19 @@
 // Rev. 0001  Oct 16,2012  H.Takeda.
 //
 module RAM_EFUSE32A (
- EN, SEL, SM, SI, CLK, WE, SENSE, VBLOW,
- FO, SO, SENSO);
-input         EN, SEL, SM, SI, CLK, WE, SENSE, VBLOW;
-output [31 : 0] FO;
-output        SO, SENSO;
+    EN,
+    SEL,
+    SM,
+    SI,
+    CLK,
+    WE,
+    SENSE,
+    VBLOW,
+    FO,
+    SO,
+    SENSO
+);
+  input EN, SEL, SM, SI, CLK, WE, SENSE, VBLOW;
+  output [31 : 0] FO;
+  output SO, SENSO;
 endmodule

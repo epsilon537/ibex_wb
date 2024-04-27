@@ -6,7 +6,7 @@
 static struct uart uart0;
 
 void main() {
-	uart_init(&uart0, (volatile void *) PLATFORM_UART_BASE);
-	uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
-	uart_printf(&uart0, "Hello World!\r\n");
+  uart_init(&uart0, (volatile void *) PLATFORM_UART_BASE);
+  uart_set_baudrate(&uart0, 115200, PLATFORM_CLK_FREQ);
+  uart_printf(&uart0, "Hello World!\r\n");
 }

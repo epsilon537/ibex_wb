@@ -9,6 +9,8 @@
 #define UART_REG_FIFO    1
 #define UART_REG_RXDATA    2
 #define UART_REG_TXDATA    3
+#define UART_REG_ISR       4
+#define UART_REG_IEN       5
 
 static unsigned remu10(unsigned n);
 static void qprintchar(struct uart * module, char **str, int c);
@@ -73,6 +75,26 @@ uint32_t uart_rx_line(struct uart * module, char * str)
 void uart_set_baudrate(struct uart * module, uint32_t baudrate, uint32_t clk_freq)
 {
   module->registers[UART_REG_SETUP] = clk_freq / baudrate;
+}
+
+void uart_irq_ack(struct uart * module, unsigned irq_mask) {
+  module->registers[UART_REG_ISR] = irq_mask;
+}
+
+void uart_irq_en(struct uart * module, unsigned irq_mask) {
+  module->registers[UART_REG_IEN] = irq_mask | module->registers[UART_REG_IEN];
+}
+
+void uart_irq_dis(struct uart * module, unsigned irq_mask) {
+  module->registers[UART_REG_IEN] = ~irq_mask & module->registers[UART_REG_IEN];
+}
+
+unsigned uart_get_isr(struct uart * module) {
+  return module->registers[UART_REG_ISR];
+}
+
+unsigned uart_get_ien(struct uart * module) {
+  return module->registers[UART_REG_IEN];
 }
 
 //int uart_printf(struct uart * module, const char * fmt, ...)
@@ -332,3 +354,5 @@ int uart_printf(struct uart * module, const char *format, ...)
   return pc;
 
 }
+
+

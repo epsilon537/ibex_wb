@@ -21,31 +21,27 @@ int usleep(unsigned long usec);
 void pcount_reset();
 
 /**
- * Stops clock counter.
+ * Stops cycle counter.
  */
-void mtime_stop();
+void mcycle_stop();
 
 /**
- * Starts clock counter.
+ * Starts cycle counter.
  */
-void mtime_start();
+void mcycle_start();
 
 /**
- * Returns lower 32 bits of current clock count.
- * @return Current clock count lower 32 bits.
+ * Returns lower 32 bits of current cycle count.
  */
-uint32_t mtime_get32();
+uint32_t mcycle_get32();
 
 /**
- * Returns current clock count.
- * @return Current clock count 64 bits.
+ * Returns current cycle count.
  */
-uint64_t mtime_get64();
+uint64_t mcycle_get64();
 
 /**
- * Converts clock counts to microseconds.
- * @param clock_cycle	Clock counts.
- * @return				Microseconds.
+ * Converts cycle counts to microseconds.
  */
 uint64_t cc2us(uint64_t clock_cycle);
 

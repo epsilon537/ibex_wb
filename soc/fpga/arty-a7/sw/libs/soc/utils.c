@@ -99,21 +99,21 @@ void pcount_reset() {
             "csrw mhpmcounter31h, x0\n");
 }
 
-void mtime_stop() {
+void mcycle_stop() {
   asm volatile ("csrw 0x320, %0" : : "r" (0xFFFFFFFF));
 }
 
-void mtime_start() {
+void mcycle_start() {
   asm volatile ("csrw 0x320, %0" : : "r" (0));
 }
 
-uint32_t mtime_get32() {
+uint32_t mcycle_get32() {
   volatile uint32_t result;
   asm volatile ("csrr %0, 0xB00" : "=r" (result));
   return result;
 }
 
-uint64_t mtime_get64() {
+uint64_t mcycle_get64() {
   volatile uint64_t result;
   volatile uint32_t lower;
   // lower bits

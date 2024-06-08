@@ -60,6 +60,27 @@ int uart_puts(struct uart * module, const char *s);
 int uart_printf(struct uart * module, const char *format, ...);
 int uart_putchar(struct uart * module, int s);
 
+#define UART_IRQ_TX_FIFO_HALF_EMPTY_MASK 0x8
+#define UART_IRQ_TX_FIFO_EMPTY_MASK 0x4
+#define UART_IRQ_RX_FIFO_HALF_FULL_MASK 0x2
+#define UART_IRQ_RX_DATA_AVL_MASK 0x1
+
+/*Retrieve uart ISR register to see which interrupts fired.*/
+unsigned uart_get_isr(struct uart * module);
+
+/*Retrieve uart IEN register to see which interrupts are enabled.*/
+unsigned uart_get_ien(struct uart * module);
+
+/*Acknowledge received interrupts. Bits set in the given mask will be cleared in the uart isr register.*/
+void uart_irq_ack(struct uart * module, unsigned irq_mask);
+/* Enable uart interrupts. Bits set enable corresponding uart interrupts. Successive enables are cumulative.
+ * To disable uart irqs, used uart_irq_dis.*/
+void uart_irq_en(struct uart * module, unsigned irq_mask);
+
+/* Disable uart interrupts. Bits set disable corresponding uart interrupts. Successive disables are cumulative.
+ * To enable uart irqs, used uart_irq_en.*/
+void uart_irq_dis(struct uart * module, unsigned irq_mask);
+
 #ifdef __cplusplus
 }
 #endif

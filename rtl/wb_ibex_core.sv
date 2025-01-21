@@ -37,8 +37,8 @@ module wb_ibex_core
 
     input wire debug_req,  // Request to enter debug mode
 
-    input  fetch_enable_t fetch_enable,  // Enable the core, won't fetch when 0
-    output logic          core_sleep
+    input  ibex_mubi_t fetch_enable,  // Enable the core, won't fetch when 0
+    output logic       core_sleep
 );  // Core in WFI with no outstanding data or instruction accesses.
 
   core_if instr_core (.*);

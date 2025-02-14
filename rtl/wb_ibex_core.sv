@@ -12,6 +12,7 @@ module wb_ibex_core
     parameter rv32m_e RV32M = ibex_pkg::RV32MNone,  // M(ultiply) extension enable
     parameter rv32b_e RV32B = ibex_pkg::RV32BNone,
     parameter regfile_e RegFile = ibex_pkg::RegFileFF,
+    parameter prefetch_type_e PrefetchType = PrefetchType_None,
     parameter bit BranchTargetALU = 1'b0,
     parameter bit WritebackStage = 1'b0,
     parameter bit DbgTriggerEn = 1'b0,  // Enable debug trigger support (one trigger only)
@@ -58,6 +59,7 @@ module wb_ibex_core
       .RV32B(RV32B),
       .RegFile(RegFile),
       .BranchTargetALU(BranchTargetALU),
+      .PrefetchType(PrefetchType),
       .WritebackStage(WritebackStage),
       .DbgTriggerEn(DbgTriggerEn),
       .DmHaltAddr(DmHaltAddr),

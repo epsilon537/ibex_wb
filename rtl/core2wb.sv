@@ -65,7 +65,7 @@ module core2wb (
           wbm_we_reg <= core.we;
           dat_m_reg <= core.wdata;
           adr_reg <= core.addr[29:2];
-          sel_reg <= core.we ? core.be : '1;
+          sel_reg <= core.we ? core.be : '1;  //'1 means all bits set.
         end
       end else begin  //A transaction is ongoing...
         if (!wb.stall) begin

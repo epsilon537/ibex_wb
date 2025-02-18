@@ -31,6 +31,8 @@ module core2wb_no_ifs (
     output logic [31:0] wb_dat_m_o
 );
 
+  logic unused = &{core_addr_i[31:30], core_addr_i[1:0]};
+
   logic transaction_ongoing_reg;
   logic wbm_stb_reg, wbm_we_reg;
   logic [31:0] dat_m_reg;
@@ -74,7 +76,7 @@ module core2wb_no_ifs (
       wb_we = wbm_we_reg;
       wb_stb = wbm_stb_reg;
       wb_cyc = 1'b1;
-      core_rvalid = ~wb_we & wb_ack_i;
+      core_rvalid = wb_ack_i;
       core_err = wb_err_i;
     end
   end

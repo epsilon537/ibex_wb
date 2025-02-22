@@ -1,7 +1,5 @@
 /* Converter between Ibex core interface and Wishbone interface */
 
-`default_nettype none
-
 `ifdef __ICARUS__
 `timescale 1 ns / 1 ps
 `endif

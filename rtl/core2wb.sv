@@ -9,6 +9,9 @@ module core2wb (
 
   import wb_pkg::*;
 
+  //core2wb is a core_if and wb_if wrapper around core2wb_no_ifs, which is not
+  //aware of interfaces and modports. This allows including core2wb_no_ifs in
+  //a CoCoTB iverilog testbench (which doesn't support modports and interfaces).
   core2wb_no_ifs core2wb_no_ifs_inst (
       .clk(wb.clk),
       .rst(wb.rst),

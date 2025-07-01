@@ -81,10 +81,6 @@ module core2wb_no_ifs (
 
   always_ff @(posedge clk) begin
     if (rst) begin
-      sel_reg <= 0;
-      adr_reg <= 0;
-      dat_m_reg <= 0;
-      wbm_we_reg <= 1'b0;
       wbm_stb_reg <= 1'b0;
       transaction_ongoing_reg <= 1'b0;
     end else begin
